@@ -1,0 +1,44 @@
+{
+    "name": "skore-labs/laravel-status",
+    "description": "Laravel code-typed statuses for models",
+    "license": "MIT",
+    "keywords": [
+        "skore-labs",
+        "laravel",
+        "statuses",
+        "eloquent",
+        "typed"
+    ],
+    "authors": [
+        {
+            "name": "Ruben Robles",
+            "email": "d8vjork@outlook.com"
+        }
+    ],
+    "require": {
+        "php": "^7.1",
+        "spatie/enum": "^2.3",
+        "illuminate/database": "~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0",
+        "illuminate/support": "~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0"
+    },
+    "require-dev": {
+        "ext-json": "*",
+        "orchestra/testbench": "~3.6.0|~3.7.0|~3.8.0",
+        "phpunit/phpunit": "^7.0|^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "SkoreLabs\\LaravelStatus\\": "src"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "SkoreLabs\\LaravelStatus\\StatusServiceProvider"
+            ]
+        }
+    }
+}
