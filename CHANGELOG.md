@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## Fixed
+
+- Variable types and names in docblocks
+- Case sensitive in status attribute mutator
+
 ## [1.0.1] - 2019-12-07
 
 ### Fixed
