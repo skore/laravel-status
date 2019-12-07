@@ -4,7 +4,7 @@ Laravel code-typed statuses for Eloquent models.
 
 ## Status
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/aa7cce89305c47f7bf9b0684b97e90ca)](https://www.codacy.com/app/d8vjork/laravel-json-api?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=skore/laravel-json-api&amp;utm_campaign=Badge_Grade) [![StyleCI](https://github.styleci.io/repos/198988581/shield?branch=master)](https://github.styleci.io/repos/198988581)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/b9eb60ed572b4baab58ac3c4c9c06e7f)](https://www.codacy.com/manual/d8vjork/laravel-status?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=skore/laravel-status&amp;utm_campaign=Badge_Grade) [![StyleCI](https://github.styleci.io/repos/226506454/shield?branch=master)](https://github.styleci.io/repos/226506454)
 
 ## Installation
 
