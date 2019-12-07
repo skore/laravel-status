@@ -19,7 +19,7 @@ class StatusCreating
     /**
      * Create a new event instance.
      *
-     * @param \App\Contracts\Statusable $statusable
+     * @param \SkoreLabs\LaravelStatus\Contracts\Statusable $statusable
      *
      * @return void
      */

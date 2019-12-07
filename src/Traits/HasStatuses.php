@@ -39,9 +39,9 @@ trait HasStatuses
     }
 
     /**
-     * Get current status.
+     * Get, set or check status relationship.
      *
-     * @param bool $getEnum
+     * @param bool $value
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo|bool
      */
