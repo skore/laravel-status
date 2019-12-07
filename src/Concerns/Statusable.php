@@ -10,6 +10,7 @@ interface Statusable
      * Get, set or check status relationship.
      *
      * @param bool $value
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo|bool
      */
     public function status($value = false);
@@ -32,6 +33,7 @@ interface Statusable
      * Set status by name or using a previous status.
      *
      * @param array|string $name
+     *
      * @return bool
      */
     public function setStatus($name);
@@ -40,6 +42,7 @@ interface Statusable
      * Set status relation as attribute.
      *
      * @param mixed $value
+     *
      * @return void
      */
     public function setStatusAttribute($value = null);
@@ -48,6 +51,7 @@ interface Statusable
      * Get if current model has status(es).
      *
      * @param string|array $value
+     *
      * @return bool
      */
     public function hasStatus($value);
@@ -56,6 +60,7 @@ interface Statusable
      * Get current model status or default instead.
      *
      * @param string $column
+     *
      * @return mixed
      */
     public function getStatus($column = 'name');
@@ -64,6 +69,7 @@ interface Statusable
      * Get default status for this model.
      *
      * @param string|array $column
+     *
      * @return \Illuminate\Database\Eloquent\Model|object|\Illuminate\Database\Eloquent\Builder|null|mixed
      */
     public static function getDefaultStatus($column = 'name');
@@ -72,7 +78,8 @@ interface Statusable
      * List all resources of a specified status.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param mixed $value
+     * @param mixed                                 $value
+     *
      * @return Illuminate\Database\Eloquent\Builder
      */
     public function scopeStatus(Builder $query, $name);

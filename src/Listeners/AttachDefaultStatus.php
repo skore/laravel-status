@@ -10,7 +10,8 @@ class AttachDefaultStatus
     /**
      * Handle the event.
      *
-     * @param  \SkoreLabs\LaravelStatus\Events\StatusCreating  $event
+     * @param \SkoreLabs\LaravelStatus\Events\StatusCreating $event
+     *
      * @return void
      */
     public function handle(StatusCreating $event)

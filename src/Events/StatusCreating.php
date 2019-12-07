@@ -2,10 +2,10 @@
 
 namespace SkoreLabs\LaravelStatus\Events;
 
-use SkoreLabs\LaravelStatus\Contracts\Statusable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
+use SkoreLabs\LaravelStatus\Contracts\Statusable;
 
 class StatusCreating
 {
@@ -20,6 +20,7 @@ class StatusCreating
      * Create a new event instance.
      *
      * @param \App\Contracts\Statusable $statusable
+     *
      * @return void
      */
     public function __construct(Statusable $statusable)

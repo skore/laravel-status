@@ -34,10 +34,12 @@ class Status extends Model
     /**
      * Get default status from model.
      *
-     * @param mixed $modelClass
+     * @param mixed  $modelClass
      * @param string $column
-     * @return \Illuminate\Database\Eloquent\Model|object|\Illuminate\Database\Eloquent\Builder|null|mixed
+     *
      * @throws mixed
+     *
+     * @return \Illuminate\Database\Eloquent\Model|object|\Illuminate\Database\Eloquent\Builder|null|mixed
      */
     public static function getDefault($modelClass, $column = 'id')
     {
@@ -59,13 +61,15 @@ class Status extends Model
      * Get column from status enum class.
      *
      * @param \Spatie\Enum\Enum $enum
-     * @param string $column
-     * @return \Illuminate\Database\Eloquent\Model|object|\Illuminate\Database\Eloquent\Builder|null|mixed
+     * @param string            $column
+     *
      * @throws mixed
+     *
+     * @return \Illuminate\Database\Eloquent\Model|object|\Illuminate\Database\Eloquent\Builder|null|mixed
      */
     public static function getFromEnum(Enum $enum, $column = 'id')
     {
-        $extractedModelClass = 'App\\Models\\' . Str::before(class_basename($enum), 'Status');
+        $extractedModelClass = 'App\\Models\\'.Str::before(class_basename($enum), 'Status');
 
         $query = self::where([
             ['name', $enum->getValue()],

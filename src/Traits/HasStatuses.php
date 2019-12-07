@@ -2,12 +2,10 @@
 
 namespace SkoreLabs\LaravelStatus\Traits;
 
-use SkoreLabs\LaravelStatus\Contracts\Statusable;
-use SkoreLabs\LaravelStatus\Events\StatusCreating;
-use SkoreLabs\LaravelStatus\Status;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
+use SkoreLabs\LaravelStatus\Events\StatusCreating;
+use SkoreLabs\LaravelStatus\Status;
 
 trait HasStatuses
 {
@@ -18,13 +16,13 @@ trait HasStatuses
 
     /**
      * Boot trait function.
-     * 
-     * @return void 
+     *
+     * @return void
      */
     public static function bootHasStatuses()
     {
         if (!class_exists(static::$statuses)) {
-            static::$statuses = config('status.enum_path') . class_basename(self::class) . 'Status';
+            static::$statuses = config('status.enum_path').class_basename(self::class).'Status';
         }
     }
 
@@ -44,6 +42,7 @@ trait HasStatuses
      * Get current status.
      *
      * @param bool $getEnum
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo|bool
      */
     public function status($value = false)
@@ -81,6 +80,7 @@ trait HasStatuses
      * Check if name is a possible status.
      *
      * @param mixed|null $name
+     *
      * @return bool
      */
     protected static function checkStatus($name = null)
@@ -92,13 +92,14 @@ trait HasStatuses
             $item = strtolower($item);
         });
 
-        return key_exists(strtolower($name), $statusesArr);
+        return array_key_exists(strtolower($name), $statusesArr);
     }
 
     /**
      * Set status by label to key and perform a save.
      *
      * @param array|string $name
+     *
      * @return bool
      */
     public function setStatus($name = null)
@@ -122,6 +123,7 @@ trait HasStatuses
      * Set status relation as attribute.
      *
      * @param mixed $value
+     *
      * @return void
      */
     public function setStatusAttribute($value = null)
@@ -137,6 +139,7 @@ trait HasStatuses
      * Get status relation as appended attribute.
      *
      * @param string|array $value
+     *
      * @return bool
      */
     public function hasStatus($value)
@@ -155,6 +158,7 @@ trait HasStatuses
      * Get model status or default instead.
      *
      * @param string $column
+     *
      * @return mixed
      */
     public function getStatus($column = 'name')
@@ -167,8 +171,10 @@ trait HasStatuses
      * Get default status for this model.
      *
      * @param string|array $column
-     * @return \Illuminate\Database\Eloquent\Model|object|\Illuminate\Database\Eloquent\Builder|null|mixed
+     *
      * @throws mixed
+     *
+     * @return \Illuminate\Database\Eloquent\Model|object|\Illuminate\Database\Eloquent\Builder|null|mixed
      */
     public static function getDefaultStatus($column = 'name')
     {
@@ -179,7 +185,8 @@ trait HasStatuses
      * List all resources of a specified status.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param mixed $value
+     * @param mixed                                 $value
+     *
      * @return Illuminate\Database\Eloquent\Builder
      */
     public function scopeStatus(Builder $query, $name)
