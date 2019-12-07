@@ -73,10 +73,10 @@ Customize enum for status check (using spatie/enum package, [check their documen
     /**
      * @var \Spatie\Enum\Enum
      */
-    protected $statuses = PostStatus::class;
+    protected static $statuses = PostStatus::class;
 ```
 
-**Note: This is not required, only if you DON'T have all your model status enum classes stored in `App\Enum` as `ModelStatus`.**
+**Note: This is not required, only if you DON'T have all your model status enum classes stored in `App\Enums` as `ModelStatus`.**
 
 ## Usage
 
@@ -133,6 +133,13 @@ If a parameter is provided, it acts as an alias of [hasStatus](#hasStatus).
 If an associative array is provided, it acts as an alias of [setStatus](#setStatus).
 
 Otherwise, it will just retrieve the relationship as `$post->status` or `$post->status()->first()`
+
+Also you can filter by scope:
+
+```php
+Post::status('published');
+Post::where('user_id', Auth::id())->status('published');
+```
 
 ### statuses
 

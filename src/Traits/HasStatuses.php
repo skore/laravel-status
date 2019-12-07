@@ -14,7 +14,19 @@ trait HasStatuses
     /**
      * @var \Spatie\Enum\Enum
      */
-    protected $statuses;
+    protected static $statuses;
+
+    /**
+     * Boot trait function.
+     * 
+     * @return void 
+     */
+    public static function bootHasStatuses()
+    {
+        if (!class_exists(static::$statuses)) {
+            static::$statuses = config('status.enum_path') . class_basename(self::class) . 'Status';
+        }
+    }
 
     /**
      * Initialize the has statuses attribute trait for an instance.
@@ -23,10 +35,6 @@ trait HasStatuses
      */
     public function initializeHasStatuses()
     {
-        if (!class_exists($this->statuses)) {
-            $this->statuses = config('status.enum_path') . class_basename(self::class) . 'Status';
-        }
-
         $this->dispatchesEvents['creating'] = StatusCreating::class;
         $this->fillable = array_merge($this->fillable, ['status']);
         $this->guarded = array_merge($this->guarded, ['status_id']);
@@ -41,10 +49,22 @@ trait HasStatuses
     public function status($value = false)
     {
         if ($value) {
-            return $this->hasStatus($value);
+            return is_array($value) && Arr::isAssoc($value)
+                ? $this->setStatus($value)
+                : $this->hasStatus($value);
         }
 
         return $this->belongsTo(Status::class);
+    }
+
+    /**
+     * Get statuses available for this model as attribute.
+     *
+     * @return array
+     */
+    public function getStatusesAttribute()
+    {
+        return static::getStatuses();
     }
 
     /**
@@ -52,26 +72,50 @@ trait HasStatuses
      *
      * @return array
      */
-    public function getStatusesAttribute()
+    public static function getStatuses()
     {
-        return $this->statuses::getValues();
+        return static::$statuses::getValues();
+    }
+
+    /**
+     * Check if name is a possible status.
+     *
+     * @param mixed|null $name
+     * @return bool
+     */
+    protected static function checkStatus($name = null)
+    {
+        $statusesArr = static::$statuses::toArray();
+
+        array_walk($statusesArr, function ($key, $item) {
+            $key = strtolower($key);
+            $item = strtolower($item);
+        });
+
+        return key_exists(strtolower($name), $statusesArr);
     }
 
     /**
      * Set status by label to key and perform a save.
      *
-     * @param mixed $name
-     * @return \SkoreLabs\LaravelStatus\Models\Status|false
+     * @param array|string $name
+     * @return bool
      */
     public function setStatus($name = null)
     {
-        $defaultStatus = $this->getDefaultStatus(['id']);
+        if (is_array($name)) {
+            if (!$this->hasStatus(array_key_first($name))) {
+                return false;
+            }
 
-        $status = $this->status()->associate(
-            Status::getFromEnum($this->statuses::make($name))
+            $name = head($name);
+        }
+
+        $this->status()->associate(
+            Status::getFromEnum(static::$statuses::make(ucwords($name)), 'id')
         );
 
-        return $this->save() ? $status : false;
+        return $this->save();
     }
 
     /**
@@ -82,9 +126,9 @@ trait HasStatuses
      */
     public function setStatusAttribute($value = null)
     {
-        if ($value && ($value = ucwords($value)) && key_exists($value, $this->statuses::toArray())) {
+        if ($value && static::checkStatus($value)) {
             $this->status()->associate(
-                Status::getFromEnum($this->statuses::make($value))
+                Status::getFromEnum(static::$statuses::make($value))
             );
         }
     }
@@ -93,27 +137,14 @@ trait HasStatuses
      * Get status relation as appended attribute.
      *
      * @param string|array $value
-     * @param bool $strict
      * @return bool
-     * @throws mixed
-     * @throws \Spatie\Enum\Exceptions\DuplicatedValueException
-     * @throws \Spatie\Enum\Exceptions\DuplicatedIndexException
-     * @throws \Spatie\Enum\Exceptions\InvalidIndexException
-     * @throws \Spatie\Enum\Exceptions\InvalidValueException
      */
-    public function hasStatus($value, $strict = false)
+    public function hasStatus($value)
     {
-        $statusValue = $this->statuses::make(
-            data_get($this->relations, 'status.name', $this->getStatus())
-        )->getValue();
-        $values = (array) $value;
-
-        if (!$strict) {
-            $values = array_map('strtolower', $values);
-            $statusValue = strtolower($statusValue);
-        }
-
-        $searchStatusArr = array_search($statusValue, $values);
+        $searchStatusArr = array_search(
+            strtolower(static::$statuses::make($this->getStatus())->getValue()),
+            array_map('strtolower', (array) $value)
+        );
 
         return is_int($searchStatusArr)
             ? $searchStatusArr >= 0
@@ -121,14 +152,15 @@ trait HasStatuses
     }
 
     /**
-     * Get actual model status or default instead.
+     * Get model status or default instead.
      *
+     * @param string $column
      * @return mixed
      */
-    protected function getStatus()
+    public function getStatus($column = 'name')
     {
-        return $this->status()->value('name')
-            ?: $this->getDefaultStatus('name');
+        return data_get($this->relations, "status.$column", $this->status->{$column})
+            ?: static::getDefaultStatus($column);
     }
 
     /**
@@ -138,7 +170,7 @@ trait HasStatuses
      * @return \Illuminate\Database\Eloquent\Model|object|\Illuminate\Database\Eloquent\Builder|null|mixed
      * @throws mixed
      */
-    public function getDefaultStatus($column = 'id')
+    public static function getDefaultStatus($column = 'name')
     {
         return Status::getDefault(self::class, $column);
     }
@@ -150,10 +182,10 @@ trait HasStatuses
      * @param mixed $value
      * @return Illuminate\Database\Eloquent\Builder
      */
-    public function scopeOfStatus(Builder $query, $name)
+    public function scopeStatus(Builder $query, $name)
     {
         return $query->whereHas('status', function (Builder $query) use ($name) {
-            $query->where('name', $name);
+            $query->where('name', 'like', $name);
         });
     }
 }

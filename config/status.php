@@ -2,6 +2,8 @@
 
 return [
 
-    'enum_path' => 'App\\Enum\\',
+    'enums_path' => 'App\\Enums\\',
+
+    'models_path' => 'App\\Models\\',
 
 ];

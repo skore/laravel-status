@@ -1,46 +1,79 @@
 <?php
 
-namespace SkoreLabs\LaravelStatus\Contracts;
+namespace App\Contracts;
 
 use Illuminate\Database\Eloquent\Builder;
 
 interface Statusable
 {
     /**
-     * Get current status relationship.
+     * Get, set or check status relationship.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @param bool $value
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo|bool
      */
-    public function status();
+    public function status($value = false);
 
     /**
-     * Get statuses available for this model.
+     * Get statuses available for this model as attribute.
      *
-     * @return mixed
+     * @return array
      */
     public function getStatusesAttribute();
 
     /**
-     * Set status by label to key.
+     * Get statuses available for this model.
      *
-     * @param mixed $name
-     * @return void
+     * @return array
      */
-    public function setStatus($name = null);
+    public static function getStatuses();
 
     /**
-     * Get model's default status.
+     * Set status by name or using a previous status.
      *
-     * @return \App\Model\Status|null
+     * @param array|string $name
+     * @return bool
      */
-    public function getDefaultStatus($columns = ['*']);
+    public function setStatus($name);
+
+    /**
+     * Set status relation as attribute.
+     *
+     * @param mixed $value
+     * @return void
+     */
+    public function setStatusAttribute($value = null);
+
+    /**
+     * Get if current model has status(es).
+     *
+     * @param string|array $value
+     * @return bool
+     */
+    public function hasStatus($value);
+
+    /**
+     * Get current model status or default instead.
+     *
+     * @param string $column
+     * @return mixed
+     */
+    public function getStatus($column = 'name');
+
+    /**
+     * Get default status for this model.
+     *
+     * @param string|array $column
+     * @return \Illuminate\Database\Eloquent\Model|object|\Illuminate\Database\Eloquent\Builder|null|mixed
+     */
+    public static function getDefaultStatus($column = 'name');
 
     /**
      * List all resources of a specified status.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param mixed $value
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Illuminate\Database\Eloquent\Builder
      */
-    public function scopeOfStatus(Builder $query, $name);
+    public function scopeStatus(Builder $query, $name);
 }

@@ -29,14 +29,4 @@ class StatusServiceProvider extends ServiceProvider
             __DIR__.'/../config/status.php' => config_path('status.php'),
         ], 'config');
     }
-
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        // 
-    }
 }
