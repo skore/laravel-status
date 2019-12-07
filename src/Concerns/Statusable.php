@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Contracts;
+namespace SkoreLabs\LaravelStatus\Contracts;
 
 use Illuminate\Database\Eloquent\Builder;
 
