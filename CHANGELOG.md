@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2019-12-10
+
+## Added
+
+- Use custom Status model (customisable in the config file)
+
+## Fixed
+
+- hasStatus didn't load relation properly
+
+## Changed
+
+- Changes to the config file
+
+## [1.0.2] - 2019-12-07
+
 ## Fixed
 
 - Variable types and names in docblocks
