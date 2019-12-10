@@ -14,6 +14,12 @@ You can install the package via composer:
 composer require skore-labs/laravel-status
 ```
 
+Then you will need to publish the package config and migrations, so then you can modify and/or migrate the new statuses table:
+
+```
+php artisan vendor:publish --provider="SkoreLabs\LaravelStatus\StatusServiceProvider"
+```
+
 ### Setup events (optional)
 
 Add the events to your `EventServiceProvider`, they will help you attaching the default status when the model is creating:
