@@ -85,14 +85,11 @@ trait HasStatuses
      */
     protected static function checkStatus($name = null)
     {
-        $statusesArr = static::$statuses::toArray();
+        $statusesArr = array_map(static function ($item) {
+            return strtolower($item);
+        }, array_flip(static::$statuses::toArray()));
 
-        array_walk($statusesArr, function ($key, $item) {
-            $key = strtolower($key);
-            $item = strtolower($item);
-        });
-
-        return array_key_exists(strtolower($name), $statusesArr);
+        return in_array(strtolower($name), $statusesArr);
     }
 
     /**
