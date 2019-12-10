@@ -3,7 +3,7 @@
 namespace SkoreLabs\LaravelStatus\Listeners;
 
 use SkoreLabs\LaravelStatus\Events\StatusCreating;
-use SkoreLabs\LaravelStatus\Models\Status;
+use SkoreLabs\LaravelStatus\Status;
 
 class AttachDefaultStatus
 {
@@ -18,7 +18,7 @@ class AttachDefaultStatus
     {
         if (!$event->model->status_id && !$event->model->status) {
             $event->model->status()->associate(
-                Status::getDefault(get_class($event->model))
+                config('status.use_model', Status::class)::getDefault(get_class($event->model))
             );
         }
     }

@@ -22,7 +22,7 @@ trait HasStatuses
     public static function bootHasStatuses()
     {
         if (!class_exists(static::$statuses)) {
-            static::$statuses = config('status.enum_path').class_basename(self::class).'Status';
+            static::$statuses = config('status.enums_path').class_basename(self::class).'Status';
         }
     }
 
@@ -53,7 +53,7 @@ trait HasStatuses
                 : $this->hasStatus($value);
         }
 
-        return $this->belongsTo(Status::class);
+        return $this->belongsTo(config('status.use_model', Status::class));
     }
 
     /**
@@ -113,7 +113,7 @@ trait HasStatuses
         }
 
         $this->status()->associate(
-            Status::getFromEnum(static::$statuses::make(ucwords($name)), 'id')
+            config('status.use_model', Status::class)::getFromEnum(static::$statuses::make(ucwords($name)), 'id')
         );
 
         return $this->save();
@@ -130,7 +130,7 @@ trait HasStatuses
     {
         if ($value && static::checkStatus($value)) {
             $this->status()->associate(
-                Status::getFromEnum(static::$statuses::make(ucwords($value)))
+                config('status.use_model', Status::class)::getFromEnum(static::$statuses::make($value))
             );
         }
     }
@@ -178,7 +178,7 @@ trait HasStatuses
      */
     public static function getDefaultStatus($column = 'name')
     {
-        return Status::getDefault(self::class, $column);
+        return config('status.use_model', Status::class)::getDefault(self::class, $column);
     }
 
     /**
