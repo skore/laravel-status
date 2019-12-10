@@ -39,7 +39,7 @@ trait HasStatuses
     }
 
     /**
-     * Get, set or check status relationship.
+     * Get current status.
      *
      * @param bool $value
      *
