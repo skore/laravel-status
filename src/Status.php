@@ -69,7 +69,7 @@ class Status extends Model
      */
     public static function getFromEnum(Enum $enum, $column = 'id')
     {
-        $extractedModelClass = 'App\\Models\\'.Str::before(class_basename($enum), 'Status');
+        $extractedModelClass = config('status.models_path').Str::before(class_basename($enum), 'Status');
 
         $query = self::where([
             ['name', $enum->getValue()],
