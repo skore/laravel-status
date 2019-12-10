@@ -127,7 +127,7 @@ trait HasStatuses
     {
         if ($value && static::checkStatus($value)) {
             $this->status()->associate(
-                config('status.use_model', Status::class)::getFromEnum(static::$statuses::make($value))
+                config('status.use_model', Status::class)::getFromEnum(static::$statuses::make(ucwords($value)))
             );
         }
     }
