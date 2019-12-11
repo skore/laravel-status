@@ -16,7 +16,7 @@ class AttachDefaultStatus
      */
     public function handle(StatusCreating $event)
     {
-        if (!$event->model->status_id && !$event->model->status) {
+        if (!$event->model->status_id || !$event->model->status) {
             $event->model->status()->associate(
                 config('status.use_model', Status::class)::getDefault(get_class($event->model))
             );
