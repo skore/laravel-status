@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.2] - 2020-01-11
+
+## Added
+
+- Custom getter in `HasStatuses` trait for Status custom model
+
+## Fixed
+
+- Get properly the model's morph class by using `getMorphClass()`
+
 ## [1.1.1] - 2019-12-10
 
 ## Fixed
