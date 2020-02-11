@@ -18,7 +18,7 @@ class AttachDefaultStatus
     {
         if (!$event->model->status_id || !$event->model->status) {
             $event->model->status()->associate(
-                config('status.use_model', Status::class)::getDefault(get_class($event->model))
+                config('status.use_model', Status::class)::getDefault($event->model->getMorphClass())
             );
         }
     }
