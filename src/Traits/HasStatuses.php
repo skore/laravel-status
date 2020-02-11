@@ -177,7 +177,9 @@ trait HasStatuses
      */
     public static function getDefaultStatus($column = 'name')
     {
-        return $this->getStatusModel()::getDefault($this->getMorphClass(), $column);
+        $modelInstance = new static();
+
+        return $modelInstance->getStatusModel()::getDefault($modelInstance->getMorphClass(), $column);
     }
 
     /**
@@ -200,7 +202,7 @@ trait HasStatuses
      *
      * @return \SkoreLabs\LaravelStatus\Status
      */
-    protected function getStatusModel()
+    public function getStatusModel()
     {
         return config('status.use_model', Status::class);
     }
