@@ -39,7 +39,7 @@ trait HasStatuses
     }
 
     /**
-     * Get current status.
+     * Get current status for this model.
      *
      * @param bool $value
      *
@@ -53,7 +53,7 @@ trait HasStatuses
                 : $this->hasStatus($value);
         }
 
-        return $this->belongsTo(config('status.use_model', Status::class));
+        return $this->belongsTo($this->getStatusModel());
     }
 
     /**
@@ -110,7 +110,7 @@ trait HasStatuses
         }
 
         $this->status()->associate(
-            config('status.use_model', Status::class)::getFromEnum(static::$statuses::make(ucwords($name)), 'id')
+            $this->getStatusModel()::getFromEnum(static::$statuses::make(ucwords($name)), 'id')
         );
 
         return $this->save();
@@ -127,7 +127,7 @@ trait HasStatuses
     {
         if ($value && static::checkStatus($value)) {
             $this->status()->associate(
-                config('status.use_model', Status::class)::getFromEnum(static::$statuses::make(ucwords($value)))
+                $this->getStatusModel()::getFromEnum(static::$statuses::make(ucwords($value)))
             );
         }
     }
@@ -177,7 +177,7 @@ trait HasStatuses
      */
     public static function getDefaultStatus($column = 'name')
     {
-        return config('status.use_model', Status::class)::getDefault(self::class, $column);
+        return $this->getStatusModel()::getDefault($this->getMorphClass(), $column);
     }
 
     /**
@@ -193,5 +193,15 @@ trait HasStatuses
         return $query->whereHas('status', function (Builder $query) use ($name) {
             $query->where('name', 'like', $name);
         });
+    }
+
+    /**
+     * Get status model class from config or default instead.
+     *
+     * @return \SkoreLabs\LaravelStatus\Status
+     */
+    protected function getStatusModel()
+    {
+        return config('status.use_model', Status::class);
     }
 }
