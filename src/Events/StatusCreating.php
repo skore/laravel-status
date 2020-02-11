@@ -9,8 +9,9 @@ use SkoreLabs\LaravelStatus\Contracts\Statusable;
 
 class StatusCreating
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
-
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
     /**
      * @var \SkoreLabs\LaravelStatus\Contracts\Statusable
      */
