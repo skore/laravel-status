@@ -73,7 +73,7 @@ class Status extends Model
 
         $query = self::where([
             ['name', $enum->getValue()],
-            ['model_type', $extractedModelClass],
+            ['model_type', (new $extractedModelClass())->getMorphClass()],
         ]);
 
         if (is_array($column)) {
