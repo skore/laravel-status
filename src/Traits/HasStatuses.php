@@ -51,8 +51,8 @@ trait HasStatuses
         $statuses = static::getStatuses();
 
         foreach ($statuses as $status) {
-            $statusEventsArr[] = 'saved' . ucfirst($status);
-            $statusEventsArr[] = 'saving' . ucfirst($status);
+            $statusEventsArr[] = 'saved'.ucfirst($status);
+            $statusEventsArr[] = 'saving'.ucfirst($status);
         }
 
         return $statusEventsArr;
@@ -100,6 +100,7 @@ trait HasStatuses
      * Check if current model status is the following.
      *
      * @param string|array $name
+     *
      * @return mixed|false
      */
     protected function checkCurrentStatus($name)
@@ -153,13 +154,15 @@ trait HasStatuses
         }
 
         $this->savingStatus = false;
+
         return $saved;
     }
 
     /**
      * Save the model to the database.
      *
-     * @param  array  $options
+     * @param array $options
+     *
      * @return bool
      */
     public function save(array $options = [])
@@ -168,7 +171,7 @@ trait HasStatuses
             parent::save($options);
         } finally {
             if ($this->savingStatus) {
-                $this->fireModelEvent('saved' . $this->getStatus());
+                $this->fireModelEvent('saved'.$this->getStatus());
             }
         }
     }
@@ -185,7 +188,7 @@ trait HasStatuses
         if ($value && static::checkStatus($value)) {
             $value = ucwords($value);
 
-            $this->savingStatus = $this->fireModelEvent('saving' . $value) !== false;
+            $this->savingStatus = $this->fireModelEvent('saving'.$value) !== false;
 
             $this->status()->associate(
                 $this->getStatusModel()::getFromEnum(static::$statuses::make($value))
