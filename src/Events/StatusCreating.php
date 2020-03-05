@@ -2,7 +2,6 @@
 
 namespace SkoreLabs\LaravelStatus\Events;
 
-use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use SkoreLabs\LaravelStatus\Contracts\Statusable;
@@ -10,8 +9,8 @@ use SkoreLabs\LaravelStatus\Contracts\Statusable;
 class StatusCreating
 {
     use Dispatchable;
-    use InteractsWithSockets;
     use SerializesModels;
+
     /**
      * @var \SkoreLabs\LaravelStatus\Contracts\Statusable
      */
