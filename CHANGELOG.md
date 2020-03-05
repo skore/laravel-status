@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2020-03-05
+
+## Added
+
+- Compatibility with Laravel 7
+- Custom model events on status `saving` and `saved` (e.g. `savingActive` & `savedActive` when save a *non active* model to active)
+- EventsServiceProvider (**no need to manually add events to your app's events**)
+
+## Changed
+
+- **Possible breakchange!** Renamed package ServiceProvider (from _StatusServiceProvider_ to _ServiceProvider_)
+
 ## [1.1.5] - 2020-03-05
 
 ## Changed
