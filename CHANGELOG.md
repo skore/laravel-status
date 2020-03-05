@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.5] - 2020-03-05
+
+## Changed
+
+- Minor changes and optimisations
+- Change default config path for models (following Laravel's default one: `App\Model`)
+
 ## [1.1.4] - 2020-01-12
 
 ## Fixed
