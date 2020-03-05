@@ -2,9 +2,9 @@
 
 namespace SkoreLabs\LaravelStatus;
 
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
-class StatusServiceProvider extends ServiceProvider
+class ServiceProvider extends BaseServiceProvider
 {
     /**
      * Bootstrap any application services.
@@ -28,5 +28,15 @@ class StatusServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../config/status.php' => config_path('status.php'),
         ], 'config');
+    }
+
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->app->register(EventServiceProvider::class);
     }
 }
