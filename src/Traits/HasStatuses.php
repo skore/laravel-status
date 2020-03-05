@@ -15,6 +15,11 @@ trait HasStatuses
     protected static $statuses;
 
     /**
+     * @var bool
+     */
+    protected $savingStatus;
+
+    /**
      * Boot trait function.
      *
      * @return void
@@ -36,6 +41,21 @@ trait HasStatuses
         $this->dispatchesEvents['creating'] = StatusCreating::class;
         $this->fillable = array_merge($this->fillable, ['status']);
         $this->guarded = array_merge($this->guarded, ['status_id']);
+
+        $this->addObservableEvents($this->getStatusObservables());
+    }
+
+    public function getStatusObservables()
+    {
+        $statusEventsArr = [];
+        $statuses = static::getStatuses();
+
+        foreach ($statuses as $status) {
+            $statusEventsArr[] = 'saved' . ucfirst($status);
+            $statusEventsArr[] = 'saving' . ucfirst($status);
+        }
+
+        return $statusEventsArr;
     }
 
     /**
@@ -77,6 +97,25 @@ trait HasStatuses
     }
 
     /**
+     * Check if current model status is the following.
+     *
+     * @param string|array $name
+     * @return mixed|false
+     */
+    protected function checkCurrentStatus($name)
+    {
+        if (is_array($name)) {
+            if (!$this->hasStatus(array_key_first($name))) {
+                return false;
+            }
+
+            $name = head($name);
+        }
+
+        return !$this->hasStatus($name = ucwords($name)) ? $name : false;
+    }
+
+    /**
      * Check if name is a possible status.
      *
      * @param mixed|null $name
@@ -101,19 +140,37 @@ trait HasStatuses
      */
     public function setStatus($name = null)
     {
-        if (is_array($name)) {
-            if (!$this->hasStatus(array_key_first($name))) {
-                return false;
-            }
-
-            $name = head($name);
+        if (!$name = $this->checkCurrentStatus($name)) {
+            return false;
         }
 
-        $this->status()->associate(
-            $this->getStatusModel()::getFromEnum(static::$statuses::make(ucwords($name)), 'id')
-        );
+        if ($this->setStatusAttribute($name) && !$saved = $this->savingStatus) {
+            return false;
+        }
 
-        return $this->save();
+        if ($saved &= (bool) $this->save()) {
+            $this->fireModelEvent("saved${name}");
+        }
+
+        $this->savingStatus = false;
+        return $saved;
+    }
+
+    /**
+     * Save the model to the database.
+     *
+     * @param  array  $options
+     * @return bool
+     */
+    public function save(array $options = [])
+    {
+        try {
+            parent::save($options);
+        } finally {
+            if ($this->savingStatus) {
+                $this->fireModelEvent('saved' . $this->getStatus());
+            }
+        }
     }
 
     /**
@@ -126,8 +183,12 @@ trait HasStatuses
     public function setStatusAttribute($value = null)
     {
         if ($value && static::checkStatus($value)) {
+            $value = ucwords($value);
+
+            $this->savingStatus = $this->fireModelEvent('saving' . $value) !== false;
+
             $this->status()->associate(
-                $this->getStatusModel()::getFromEnum(static::$statuses::make(ucwords($value)))
+                $this->getStatusModel()::getFromEnum(static::$statuses::make($value))
             );
         }
     }
