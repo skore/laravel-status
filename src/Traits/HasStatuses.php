@@ -4,7 +4,6 @@ namespace SkoreLabs\LaravelStatus\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use SkoreLabs\LaravelStatus\Events\StatusCreating;
 use SkoreLabs\LaravelStatus\Status;
 
@@ -129,8 +128,10 @@ trait HasStatuses
     protected static function checkStatus($name = null)
     {
         return in_array($name, with(new static())->formatStatusName(
-            array_flip(static::$statuses::toArray()
-        )));
+            array_flip(
+                static::$statuses::toArray()
+            )
+        ));
     }
 
     /**
