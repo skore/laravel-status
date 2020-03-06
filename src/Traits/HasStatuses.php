@@ -4,6 +4,7 @@ namespace SkoreLabs\LaravelStatus\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use SkoreLabs\LaravelStatus\Events\StatusCreating;
 use SkoreLabs\LaravelStatus\Status;
 
@@ -51,8 +52,10 @@ trait HasStatuses
         $statuses = static::getStatuses();
 
         foreach ($statuses as $status) {
-            $statusEventsArr[] = 'saved'.ucfirst($status);
-            $statusEventsArr[] = 'saving'.ucfirst($status);
+            $status = $this->formatStatusName($status);
+
+            $statusEventsArr[] = "saved${status}";
+            $statusEventsArr[] = "saving${status}";
         }
 
         return $statusEventsArr;
@@ -63,7 +66,7 @@ trait HasStatuses
      *
      * @param bool $value
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo|bool
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo|string|bool
      */
     public function status($value = false)
     {
@@ -97,7 +100,7 @@ trait HasStatuses
     }
 
     /**
-     * Check if current model status is the following.
+     * Check if current model status is the provided and return.
      *
      * @param string|array $name
      *
@@ -105,15 +108,15 @@ trait HasStatuses
      */
     protected function checkCurrentStatus($name)
     {
-        if (is_array($name)) {
-            if (!$this->hasStatus(array_key_first($name))) {
-                return false;
-            }
+        $name = (array) $name;
+        $originalName = array_key_first($name);
+        $proposedName = head($name);
 
-            $name = head($name);
+        if ($this->hasStatus([$originalName, $proposedName]) !== $originalName) {
+            return false;
         }
 
-        return !$this->hasStatus($name = ucwords($name)) ? $name : false;
+        return $proposedName;
     }
 
     /**
@@ -125,15 +128,13 @@ trait HasStatuses
      */
     protected static function checkStatus($name = null)
     {
-        $statusesArr = array_map(static function ($item) {
-            return strtolower($item);
-        }, array_flip(static::$statuses::toArray()));
-
-        return in_array(strtolower($name), $statusesArr);
+        return in_array($name, with(new static())->formatStatusName(
+            array_flip(static::$statuses::toArray()
+        )));
     }
 
     /**
-     * Set status by label to key and perform a save.
+     * Set status by label(s) to key and perform a save.
      *
      * @param array|string $name
      *
@@ -141,21 +142,14 @@ trait HasStatuses
      */
     public function setStatus($name = null)
     {
-        if (!$name = $this->checkCurrentStatus($name)) {
+        $name = $this->checkCurrentStatus($name);
+        $this->setStatusAttribute($name);
+
+        if (is_null($name) || !$this->savingStatus) {
             return false;
         }
 
-        if ($this->setStatusAttribute($name) && !$saved = $this->savingStatus) {
-            return false;
-        }
-
-        if ($saved &= (bool) $this->save()) {
-            $this->fireModelEvent("saved${name}");
-        }
-
-        $this->savingStatus = false;
-
-        return $saved;
+        return $this->save();
     }
 
     /**
@@ -171,7 +165,8 @@ trait HasStatuses
             return parent::save($options);
         } finally {
             if ($this->savingStatus) {
-                $this->fireModelEvent('saved'.$this->getStatus());
+                $this->savingStatus = false;
+                $this->fireModelEvent('saved'.$this->formatStatusName($this->getStatus()), false);
             }
         }
     }
@@ -185,10 +180,10 @@ trait HasStatuses
      */
     public function setStatusAttribute($value = null)
     {
-        if ($value && static::checkStatus($value)) {
-            $value = ucwords($value);
+        $value = $this->formatStatusName($value);
 
-            $this->savingStatus = $this->fireModelEvent('saving'.$value) !== false;
+        if ($value && static::checkStatus($value)) {
+            $this->savingStatus = $this->fireModelEvent("saving${value}") !== false;
 
             $this->status()->associate(
                 $this->getStatusModel()::getFromEnum(static::$statuses::make($value))
@@ -201,17 +196,17 @@ trait HasStatuses
      *
      * @param string|array $value
      *
-     * @return bool
+     * @return bool|string
      */
     public function hasStatus($value)
     {
         $searchStatusArr = array_search(
-            strtolower(static::$statuses::make($this->getStatus())->getValue()),
-            array_map('strtolower', (array) $value)
+            $this->formatStatusName((string) static::$statuses::make($this->getStatus())),
+            (array) $this->formatStatusName($value)
         );
 
         return is_int($searchStatusArr)
-            ? $searchStatusArr >= 0
+            ? $value[$searchStatusArr]
             : $searchStatusArr;
     }
 
@@ -269,5 +264,25 @@ trait HasStatuses
     public function getStatusModel()
     {
         return config('status.use_model', Status::class);
+    }
+
+    /**
+     * Get status name capitalised.
+     *
+     * @param string|array|null $name
+     *
+     * @return string|string[]|false
+     */
+    protected function formatStatusName($name = null)
+    {
+        if (!$name) {
+            return false;
+        }
+
+        $replaceStrFn = static function ($name) {
+            return str_replace(' ', '', ucwords($name));
+        };
+
+        return is_array($name) ? array_map($replaceStrFn, $name) : $replaceStrFn($name);
     }
 }
