@@ -168,7 +168,7 @@ trait HasStatuses
     public function save(array $options = [])
     {
         try {
-            parent::save($options);
+            return parent::save($options);
         } finally {
             if ($this->savingStatus) {
                 $this->fireModelEvent('saved'.$this->getStatus());
