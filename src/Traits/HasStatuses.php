@@ -115,7 +115,7 @@ trait HasStatuses
         $name = (array) $name;
         $checkNamesArr = array_filter([
             array_key_first($name) ?? null,
-            head($name) ?? null
+            head($name) ?? null,
         ]);
 
         if (count($checkNamesArr) > 1 && $this->hasStatus($checkNamesArr) === head($checkNamesArr)) {
