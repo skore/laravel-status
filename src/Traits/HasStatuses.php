@@ -45,7 +45,12 @@ trait HasStatuses
         $this->addObservableEvents($this->getStatusObservables());
     }
 
-    public function getStatusObservables()
+    /**
+     * Get statuses custom observables events.
+     *
+     * @return array
+     */
+    protected function getStatusObservables()
     {
         $statusEventsArr = [];
         $statuses = static::getStatuses();
@@ -53,8 +58,8 @@ trait HasStatuses
         foreach ($statuses as $status) {
             $status = $this->formatStatusName($status);
 
-            $statusEventsArr[] = "saved${status}";
             $statusEventsArr[] = "saving${status}";
+            $statusEventsArr[] = "saved${status}";
         }
 
         return $statusEventsArr;
@@ -230,8 +235,6 @@ trait HasStatuses
      * Get default status for this model.
      *
      * @param string|array $column
-     *
-     * @throws mixed
      *
      * @return \Illuminate\Database\Eloquent\Model|object|\Illuminate\Database\Eloquent\Builder|null|mixed
      */
