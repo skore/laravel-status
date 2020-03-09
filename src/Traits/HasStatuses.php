@@ -113,14 +113,16 @@ trait HasStatuses
     protected function checkCurrentStatus($name)
     {
         $name = (array) $name;
-        $originalName = array_key_first($name);
-        $proposedName = head($name);
+        $checkNamesArr = array_filter([
+            array_key_first($name) ?? null,
+            head($name) ?? null
+        ]);
 
-        if ($this->hasStatus([$originalName, $proposedName]) !== $originalName) {
+        if (count($checkNamesArr) > 1 && $this->hasStatus($checkNamesArr) === head($checkNamesArr)) {
             return false;
         }
 
-        return $proposedName;
+        return last($checkNamesArr);
     }
 
     /**
