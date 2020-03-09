@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.3] - 2020-03-09
+
+## Fixed
+
+- Fixed some issues checking statuses on `setStatus(['previous' => 'new'])`
+
+## Changed
+
+- Minor changes to code style
+
 ## [1.2.2] - 2020-03-06
 
 ## Fixed
