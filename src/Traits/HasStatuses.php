@@ -118,7 +118,7 @@ trait HasStatuses
             head($name) ?? null,
         ]);
 
-        if (count($checkNamesArr) > 1 && $this->hasStatus($checkNamesArr) === head($checkNamesArr)) {
+        if (count($checkNamesArr) > 1 && $this->hasStatus($checkNamesArr) !== head($checkNamesArr)) {
             return false;
         }
 
