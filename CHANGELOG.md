@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.1] - 2020-03-13
+
+## Added
+
+- Missed config option to the file
+
+## Changed
+
+- Default to true enable_events config option
+
 ## [1.3.0] - 2020-03-13
 
 ## Added
