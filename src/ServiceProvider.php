@@ -37,6 +37,8 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function register()
     {
-        $this->app->register(EventServiceProvider::class);
+        if (config('status.enable_events', true)) {
+            $this->app->register(EventServiceProvider::class);
+        }
     }
 }

@@ -41,7 +41,7 @@ trait HasStatuses
         $this->fillable = array_merge($this->fillable, ['status']);
         $this->guarded = array_merge($this->guarded, ['status_id']);
 
-        if (config('status.enable_events')) {
+        if (config('status.enable_events', true)) {
             static::creating(function () {
                 event(new StatusCreating($this));
             });
