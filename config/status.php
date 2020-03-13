@@ -8,4 +8,6 @@ return [
 
     'models_path' => 'App\\',
 
+    'enable_events' => true,
+
 ];
