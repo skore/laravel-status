@@ -38,11 +38,23 @@ trait HasStatuses
      */
     public function initializeHasStatuses()
     {
-        $this->dispatchesEvents['creating'] = StatusCreating::class;
         $this->fillable = array_merge($this->fillable, ['status']);
         $this->guarded = array_merge($this->guarded, ['status_id']);
 
-        $this->addObservableEvents($this->getStatusObservables());
+        if (config('status.enable_events')) {
+            static::creating(function () {
+                event(new StatusCreating($this));
+            });
+
+            $this->addObservableEvents($this->getStatusObservables());
+
+            static::saving(function () {
+                if ($this->savingStatus) {
+                    $this->savingStatus = false;
+                    $this->fireModelEvent('saved'.$this->formatStatusName($this->getStatus()), false);
+                }
+            });
+        }
     }
 
     /**
@@ -158,25 +170,6 @@ trait HasStatuses
         }
 
         return $this->save();
-    }
-
-    /**
-     * Save the model to the database.
-     *
-     * @param array $options
-     *
-     * @return bool
-     */
-    public function save(array $options = [])
-    {
-        try {
-            return parent::save($options);
-        } finally {
-            if ($this->savingStatus) {
-                $this->savingStatus = false;
-                $this->fireModelEvent('saved'.$this->formatStatusName($this->getStatus()), false);
-            }
-        }
     }
 
     /**
