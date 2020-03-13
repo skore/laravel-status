@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2020-03-13
+
+## Added
+
+- Config option for enable or disable all the package events
+
+## Fixed
+
+- Change trait event from Model's `dispatchesEvents` to passing callbacks methods
+- Saving from a replaced Model's built-in method to another event (`saving`)
+
 ## [1.2.4] - 2020-03-10
 
 ## Fixed
