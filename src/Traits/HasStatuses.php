@@ -206,7 +206,7 @@ trait HasStatuses
             (array) $this->formatStatusName($value)
         );
 
-        return is_int($searchStatusArr)
+        return is_int($searchStatusArr) && is_array($value)
             ? $value[$searchStatusArr]
             : $searchStatusArr;
     }
