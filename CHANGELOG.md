@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.3] - 2020-07-02
+
+## Fixed
+
+- HasStatus method was returning first string char
+
 ## [1.3.2] - 2020-04-06
 
 ## Fixed
