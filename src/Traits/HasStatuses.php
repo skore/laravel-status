@@ -201,14 +201,14 @@ trait HasStatuses
      */
     public function hasStatus($value)
     {
-        $searchStatusArr = array_search(
+        $searchArrResult = array_search(
             $this->formatStatusName((string) static::$statuses::make($this->getStatus())),
             (array) $this->formatStatusName($value)
         );
 
-        return is_int($searchStatusArr) && is_array($value)
-            ? $value[$searchStatusArr]
-            : $searchStatusArr;
+        return $searchArrResult === false
+            ? false
+            : $value[$searchArrResult];
     }
 
     /**

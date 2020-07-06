@@ -68,6 +68,8 @@ Customize enum for status check (using spatie/enum package, [check their documen
 
 Check if model has status(es).
 
+**Note: It returns the current matched status name.**
+
 ```php
 // Post has status Published
 $post->hasStatus('published');
