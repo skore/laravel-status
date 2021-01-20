@@ -4,6 +4,7 @@ namespace SkoreLabs\LaravelStatus\Nova\Filters;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Filters\BooleanFilter;
+use SkoreLabs\LaravelStatus\Scopes\DefaultStatusScope;
 use SkoreLabs\LaravelStatus\Status;
 
 class StatusFilter extends BooleanFilter
@@ -53,7 +54,7 @@ class StatusFilter extends BooleanFilter
             }
         }
 
-        return $query;
+        return $query->withoutGlobalScope(DefaultStatusScope::class);
     }
 
     /**
