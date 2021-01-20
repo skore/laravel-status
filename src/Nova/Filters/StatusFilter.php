@@ -50,9 +50,12 @@ class StatusFilter extends BooleanFilter
             return $query;
         }
 
+        $i = 0;
+
         foreach ($value as $status => $enabled) {
             if ($enabled) {
-                $query->orWhere('status_id', $status);
+                $query->where('status_id', '=', $status, $i === 0 ? 'and' : 'or');
+                $i++;
             }
         }
 
