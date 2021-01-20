@@ -23,8 +23,12 @@
     },
     "require-dev": {
         "ext-json": "*",
+        "laravel/nova": "^2.0|^3.0",
         "orchestra/testbench": "~3.6.0|~3.7.0|~3.8.0",
         "phpunit/phpunit": "^7.0|^8.0"
+    },
+    "suggest": {
+        "laravel/nova": "Required if using status nova filter, if not ignore this"
     },
     "autoload": {
         "psr-4": {
