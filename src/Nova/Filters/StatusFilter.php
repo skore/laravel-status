@@ -23,22 +23,24 @@ class StatusFilter extends BooleanFilter
     /**
      * Create a new filter instance.
      *
-     * @param  string  $type
+     * @param string $type
+     *
      * @return void
      */
     public function __construct($type)
     {
         $this->statusesQuery = Status::where([
-            'model_type' => $type
+            'model_type' => $type,
         ]);
     }
 
     /**
      * Apply the filter to the given query.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @param  mixed  $value
+     * @param \Illuminate\Http\Request              $request
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param mixed                                 $value
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function apply(Request $request, $query, $value)
@@ -59,13 +61,14 @@ class StatusFilter extends BooleanFilter
     /**
      * Get the filter's available options.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return array
      */
     public function options(Request $request)
     {
         return (clone $this->statusesQuery)
-            ->pluck("id", "name")
+            ->pluck('id', 'name')
             ->all();
     }
 
@@ -87,6 +90,7 @@ class StatusFilter extends BooleanFilter
      * Set option as default initial filter.
      *
      * @param string $value
+     *
      * @return $this
      */
     public function setDefault($value)
