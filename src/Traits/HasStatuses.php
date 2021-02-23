@@ -220,9 +220,7 @@ trait HasStatuses
      */
     public function getStatus($column = 'name')
     {
-        $this->loadMissing('status');
-
-        return data_get($this, "status.$column")
+        return $this->status()->value($column)
             ?: static::getDefaultStatus($column);
     }
 
