@@ -189,13 +189,11 @@ trait HasStatuses
     {
         $value = $this->formatStatusName($value);
 
-        // if ($value && static::checkStatus($value)) {
         $this->savingStatus = $this->fireModelEvent("saving${value}") !== false;
 
         $this->status()->associate(
             $this->status()->getModel()::getFromEnum(static::statusesClass()::from($value), $this)
         );
-        // }
     }
 
     /**
@@ -207,9 +205,12 @@ trait HasStatuses
      */
     public function hasStatus($value)
     {
-        return static::statusesClass()::from($this->getStatus())->equals(
-            ...Collection::make((array) $value)->mapInto(static::statusesClass())
-        );
+        $enumFromStatusInstance = static::statusesClass()::from($this->getStatus());
+
+        return Collection::make((array) $value)->mapInto(static::statusesClass())
+            ->every(function ($item) use ($enumFromStatusInstance) {
+                return $enumFromStatusInstance->equals($item);
+            });
     }
 
     /**
