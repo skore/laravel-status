@@ -2,7 +2,6 @@
 
 namespace SkoreLabs\LaravelStatus\Tests\Fixtures;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use SkoreLabs\LaravelStatus\Contracts\Statusable;
 use SkoreLabs\LaravelStatus\Traits\HasStatuses;
