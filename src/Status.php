@@ -2,8 +2,8 @@
 
 namespace SkoreLabs\LaravelStatus;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 use Spatie\Enum\Enum;
 
 class Status extends Model
@@ -36,10 +36,10 @@ class Status extends Model
      *
      * @param mixed  $modelClass
      * @param string $column
-     *
-     * @throws mixed
-     *
+     * 
      * @return \Illuminate\Database\Eloquent\Model|object|\Illuminate\Database\Eloquent\Builder|null|mixed
+     * 
+     * @deprecated Removing this method on next major release of "skore-labs/laravel-status"
      */
     public static function getDefault($modelClass, $column = 'id')
     {
@@ -61,25 +61,45 @@ class Status extends Model
      * Get column from status enum class.
      *
      * @param \Spatie\Enum\Enum $enum
-     * @param string            $column
-     *
-     * @throws mixed
+     * @param \Illuminate\Database\Eloquent\Model $from
+     * @param string|array            $column
      *
      * @return \Illuminate\Database\Eloquent\Model|object|\Illuminate\Database\Eloquent\Builder|null|mixed
      */
-    public static function getFromEnum(Enum $enum, $column = 'id')
+    public static function getFromEnum(Enum $enum, Model $from, $column = 'id')
     {
-        $extractedModelClass = config('status.models_path').Str::before(class_basename($enum), 'Status');
+        $fromModelMorphClass = $from->getMorphClass();
 
-        $query = self::where([
-            ['name', $enum->getValue()],
-            ['model_type', (new $extractedModelClass())->getMorphClass()],
-        ]);
+        $query = self::query()
+            ->where('model_type', $fromModelMorphClass)
+            ->where('name', 'like', "%{$enum->value}%");
 
-        if (is_array($column)) {
-            return $query->first($column) ?: self::getDefault($extractedModelClass, $column);
+        if ($query->count('id') === 0) {
+            $query->orWhere(function (Builder $query) use ($fromModelMorphClass) {
+                $query->defaultFrom($fromModelMorphClass);
+            });
         }
 
-        return $query->value($column) ?: self::getDefault($extractedModelClass, $column);
+        return is_array($column)
+            ? $query->first($column)
+            : $query->value($column);
+    }
+
+    /**
+     * Get default status from model.
+     * 
+     * @param \Illuminate\Database\Eloquent\Builder $query 
+     * @param string|\Illuminate\Database\Eloquent\Model $modelType 
+     * 
+     * @return void
+     */
+    public function scopeDefaultFrom(Builder $query, $modelType)
+    {
+        $query->where(
+            'model_type',
+            $modelType instanceof Model
+                ? $modelType->getMorphClass()
+                : $modelType
+        )->where('is_default', true);
     }
 }

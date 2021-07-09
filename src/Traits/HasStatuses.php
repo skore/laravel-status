@@ -4,30 +4,24 @@ namespace SkoreLabs\LaravelStatus\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use SkoreLabs\LaravelStatus\Events\StatusCreating;
 use SkoreLabs\LaravelStatus\Status;
+use Spatie\Enum\Enum;
 
 trait HasStatuses
 {
-    /**
-     * @var \Spatie\Enum\Enum
-     */
-    protected static $statuses;
-
     /**
      * @var bool
      */
     protected $savingStatus;
 
-    /**
-     * Boot trait function.
-     *
-     * @return void
-     */
     public static function bootHasStatuses()
     {
-        if (!class_exists(static::$statuses)) {
-            static::$statuses = config('status.enums_path').class_basename(self::class).'Status';
+        if (config('status.enable_events', true)) {
+            static::creating(function ($model) {
+                event(new StatusCreating($model));
+            });
         }
     }
 
@@ -42,19 +36,25 @@ trait HasStatuses
         $this->guarded = array_merge($this->guarded, ['status_id']);
 
         if (config('status.enable_events', true)) {
-            static::creating(function () {
-                event(new StatusCreating($this));
-            });
-
             $this->addObservableEvents($this->getStatusObservables());
 
             static::saving(function () {
                 if ($this->savingStatus) {
                     $this->savingStatus = false;
-                    $this->fireModelEvent('saved'.$this->formatStatusName($this->getStatus()), false);
+                    $this->fireModelEvent('saved' . $this->formatStatusName($this->getStatus()), false);
                 }
             });
         }
+    }
+
+    /**
+     * Get the statuses enum used for some utilities.
+     * 
+     * @return string|\Spatie\Enum\Enum
+     */
+    public static function statusesClass()
+    {
+        return config('status.enums_path') . class_basename(self::class) . 'Status';
     }
 
     /**
@@ -92,7 +92,9 @@ trait HasStatuses
                 : $this->hasStatus($value);
         }
 
-        return $this->belongsTo($this->getStatusModel());
+        return $this->belongsTo(
+            config('status.use_model', Status::class)
+        );
     }
 
     /**
@@ -112,7 +114,7 @@ trait HasStatuses
      */
     public static function getStatuses()
     {
-        return static::$statuses::getValues();
+        return static::statusesClass()::toValues();
     }
 
     /**
@@ -125,6 +127,7 @@ trait HasStatuses
     protected function checkCurrentStatus($name)
     {
         $name = (array) $name;
+
         $checkNamesArr = array_filter([
             array_key_first($name) ?? null,
             head($name) ?? null,
@@ -148,7 +151,7 @@ trait HasStatuses
     {
         return in_array($name, with(new static())->formatStatusName(
             array_flip(
-                static::$statuses::toArray()
+                static::statusesClass()::toArray()
             )
         ));
     }
@@ -156,13 +159,16 @@ trait HasStatuses
     /**
      * Set status by label(s) to key and perform a save.
      *
-     * @param array|string $name
+     * @param array|string|\Spatie\Enum\Enum $name
      *
      * @return bool
      */
     public function setStatus($name = null)
     {
-        $name = $this->checkCurrentStatus($name);
+        $name = $this->checkCurrentStatus(
+            $name instanceof Enum ? $name->value : $name
+        );
+
         $this->setStatusAttribute($name);
 
         if (is_null($name) || !$this->savingStatus) {
@@ -183,32 +189,27 @@ trait HasStatuses
     {
         $value = $this->formatStatusName($value);
 
-        if ($value && static::checkStatus($value)) {
+        // if ($value && static::checkStatus($value)) {
             $this->savingStatus = $this->fireModelEvent("saving${value}") !== false;
 
             $this->status()->associate(
-                $this->getStatusModel()::getFromEnum(static::$statuses::make($value))
+                $this->status()->getModel()::getFromEnum(static::statusesClass()::from($value), $this)
             );
-        }
+        // }
     }
 
     /**
      * Get status relation as appended attribute.
      *
-     * @param string|array $value
+     * @param string|array|\Spatie\Enum\Enum $value
      *
-     * @return bool|string
+     * @return bool
      */
     public function hasStatus($value)
     {
-        $searchArrResult = array_search(
-            $this->formatStatusName((string) static::$statuses::make($this->getStatus())),
-            (array) $this->formatStatusName($value)
+        return static::statusesClass()::from($this->getStatus())->equals(
+            ...Collection::make((array) $value)->mapInto(static::statusesClass())
         );
-
-        return $searchArrResult === false
-            ? false
-            : $value[$searchArrResult];
     }
 
     /**
@@ -216,12 +217,11 @@ trait HasStatuses
      *
      * @param string $column
      *
-     * @return mixed
+     * @return string|null
      */
     public function getStatus($column = 'name')
     {
-        return $this->status()->value($column)
-            ?: static::getDefaultStatus($column);
+        return $this->status()->value($column);
     }
 
     /**
@@ -235,7 +235,10 @@ trait HasStatuses
     {
         $modelInstance = new static();
 
-        return $modelInstance->getStatusModel()::getDefault($modelInstance->getMorphClass(), $column);
+        return $modelInstance->status()->getModel()
+            ->query()
+            ->defaultFrom($modelInstance)
+            ->value($column);
     }
 
     /**
@@ -251,16 +254,6 @@ trait HasStatuses
         return $query->whereHas('status', function (Builder $query) use ($name) {
             $query->where('name', 'like', $name);
         });
-    }
-
-    /**
-     * Get status model class from config or default instead.
-     *
-     * @return \SkoreLabs\LaravelStatus\Status
-     */
-    public function getStatusModel()
-    {
-        return config('status.use_model', Status::class);
     }
 
     /**
