@@ -1,4 +1,6 @@
 /vendor/
 composer.lock
 .phpunit.result.cache
+/xml-coverage/
+clover.xml
 phpunit.xml
