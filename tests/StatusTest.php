@@ -2,7 +2,6 @@
 
 namespace SkoreLabs\LaravelStatus\Tests;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
 use SkoreLabs\LaravelStatus\Events\StatusCreating;
@@ -23,14 +22,14 @@ class StatusTest extends TestCase
         ])->each(function ($names, $modelType) {
             foreach ($names as $name) {
                 Status::create([
-                    'name' => $name,
+                    'name'       => $name,
                     'model_type' => $modelType,
                     'is_default' => array_search($name, $names, true) === 0,
                 ]);
             }
         });
     }
-    
+
     public function test_status_assignment()
     {
         /** @var \SkoreLabs\LaravelStatus\Tests\Fixtures\Post $post */
@@ -41,7 +40,7 @@ class StatusTest extends TestCase
         $this->assertFalse($post->isDirty(), 'Model::status($value) should associate + save (persisting)');
 
         $this->assertTrue($post->status->name === 'draft', 'Model status should be the one previously assigned: "draft"');
-        
+
         $this->assertTrue(
             $post->hasStatus('dRaFt') && $post->status(['dRafT']),
             'Model::hasStatus($name) & Model::status([$name, ...]) methods should work'
@@ -51,7 +50,7 @@ class StatusTest extends TestCase
             $post->hasStatus(['published', 'archived']),
             'Model::hasStatus([$name, ...]) method shouldn\'t return true when array of statuses doesn\'t match the current "draft"'
         );
-        
+
         $this->assertTrue(
             $post->hasStatus(PostStatuses::draft()),
             'Model::hasStatus($enum) method should also work with enums'
@@ -95,7 +94,7 @@ class StatusTest extends TestCase
             Status::defaultFrom($post)->value('name'),
             'Status::defaultFrom($model) should get the default status for $model which is "draft"'
         );
-        
+
         // TODO: Remove this once is fully deprecated
         $this->assertEquals(
             PostStatuses::draft(),
@@ -116,7 +115,7 @@ class StatusTest extends TestCase
             Status::getFromEnum(PostStatuses::published(), $post, 'name'),
             'Status::getFromEnum($enum, $model, \'name\') published from posts must return "published"'
         );
-        
+
         $this->assertTrue(
             Status::where('name', (string) PostStatuses::published())->first(['*'])->is(
                 Status::getFromEnum(PostStatuses::published(), $post, ['*'])
