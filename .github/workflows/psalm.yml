@@ -28,7 +28,12 @@ jobs:
                   key: composer-${{ hashFiles('composer.lock') }}
 
             - name: Run composer install
-              run: composer install -n --prefer-dist
+              env:
+                NOVA_USERNAME: ${{ secrets.NOVA_USERNAME }}
+                NOVA_PASSWORD: ${{ secrets.NOVA_PASSWORD }}
+              run: |
+                composer config http-basic.nova.laravel.com $NOVA_USERNAME $NOVA_PASSWORD
+                composer install -n --prefer-dist
 
             - name: Run psalm
               run: ./vendor/bin/psalm -c psalm.xml --show-info=true
