@@ -9,7 +9,6 @@ use SkoreLabs\LaravelStatus\Traits\HasStatuses;
 
 class Post extends Model implements Statusable
 {
-    use HasFactory;
     use HasStatuses;
 
     /**

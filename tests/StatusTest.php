@@ -2,6 +2,7 @@
 
 namespace SkoreLabs\LaravelStatus\Tests;
 
+use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
 use SkoreLabs\LaravelStatus\Events\StatusCreating;
@@ -13,6 +14,8 @@ use SkoreLabs\LaravelStatus\Tests\Fixtures\PostStatuses;
 
 class StatusTest extends TestCase
 {
+    use WithFaker;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -33,7 +36,10 @@ class StatusTest extends TestCase
     public function test_status_assignment()
     {
         /** @var \SkoreLabs\LaravelStatus\Tests\Fixtures\Post $post */
-        $post = Post::factory()->makeOne();
+        $post = Post::make(
+            'title'   => $this->faker->words(3, true),
+            'content' => $this->faker->paragraph(),
+        );
 
         $post->setStatus('draft');
 
@@ -69,7 +75,10 @@ class StatusTest extends TestCase
         );
 
         /** @var \SkoreLabs\LaravelStatus\Tests\Fixtures\Post $post */
-        $post = Post::factory()->makeOne();
+        $post = Post::make([
+            'title'   => $this->faker->words(3, true),
+            'content' => $this->faker->paragraph(),
+        ]);
 
         $this->assertEmpty(
             optional($post->status)->name,
@@ -87,7 +96,10 @@ class StatusTest extends TestCase
     public function test_status_model_methods()
     {
         /** @var \SkoreLabs\LaravelStatus\Tests\Fixtures\Post $post */
-        $post = Post::factory()->makeOne();
+        $post = Post::make([
+            'title'   => $this->faker->words(3, true),
+            'content' => $this->faker->paragraph(),
+        ]);
 
         $this->assertEquals(
             PostStatuses::draft(),
