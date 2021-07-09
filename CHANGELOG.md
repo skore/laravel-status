@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2021-07-09
+
+## Changed
+
+- Model::hasStatus() now accepts enum instances
+- Required package `spatie/enum` upgraded to v3
+- A lot of simplification all over the place
+- Deprecated static method `Status::getDefault()` use instead `Status::defaultFrom($model)` query scope
+
+## Added
+
+- `Status::defaultFrom($model)` local query scope
+- `Statusable::statusesClass` static method to get Statuses enum (can be also replaced to your own path)
+- Some package tests covering most of its code
+
+## Removed
+
+- `Statusable::statuses` static propery has been removed in favor of `Statusable::statusesClass` to be user configurable
+
 ## [2.0.3] - 2021-02-23
 
 ## Fixed

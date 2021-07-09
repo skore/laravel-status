@@ -41,15 +41,18 @@ class Post extends Model implements Statusable
 }
 ```
 
-Customize enum for status check (using spatie/enum package, [check their documentation](https://docs.spatie.be/enum/v2/introduction/)):
+Customize enum for status check (using _spatie/enum_ package, [check their documentation](https://docs.spatie.be/enum/v2/introduction/)):
 
 ```php
-    use App\Statuses\PostStatus;
-
     /**
-     * @var \Spatie\Enum\Enum
+     * Get the statuses enum used for some utilities.
+     * 
+     * @return string|\Spatie\Enum\Enum
      */
-    protected static $statuses = PostStatus::class;
+    public static function statusesClass()
+    {
+        return \App\Statuses\PostStatuses::class;
+    }
 ```
 
 **Note: This is not required, only if you DON'T have all your model status enum classes stored in `App\Enums` as `ModelStatus`.**
@@ -142,12 +145,8 @@ Get the model's default status.
 // Default status for post is Published, so it returns Published
 Post::getDefaultStatus();
 
-// You can use Status model as well
-Status::getDefault(Post::class);
-// Also specify value to return like '->value('id')'
-Status::getDefault(Post::class, 'id');
-// Or return the object with columns like '->first(['id', 'name'])'
-Status::getDefault(Post::class, ['id', 'name']);
+// You can use Status model query scope as well
+Status::query()->defaultFrom(Post::class)->first();
 ```
 
 ## Support
