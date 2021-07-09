@@ -17,7 +17,8 @@
       <directory suffix=".php">src/</directory>
     </include>
     <report>
-      <xml outputFile="coverage.xml"/>
+      <clover outputFile="clover.xml"/>
+      <xml outputDirectory="xml-coverage"/>
     </report>
   </coverage>
   <testsuites>
