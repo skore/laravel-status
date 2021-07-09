@@ -18,7 +18,6 @@
     </include>
     <report>
       <clover outputFile="clover.xml"/>
-      <xml outputDirectory="xml-coverage"/>
     </report>
   </coverage>
   <testsuites>

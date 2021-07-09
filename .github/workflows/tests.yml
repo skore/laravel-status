@@ -56,5 +56,4 @@ jobs:
             -p $CODACY_PROJECT_NAME \
             --organization-provider gh \
             -l php \
-            -r xml-coverage/index.xml \
             -r clover.xml
