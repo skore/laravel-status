@@ -16,11 +16,11 @@ class TestCase extends \Orchestra\Testbench\TestCase
     {
         parent::setUp();
 
-        include_once __DIR__ . '/../database/migrations/create_statuses_table.php.stub';
+        include_once __DIR__.'/../database/migrations/create_statuses_table.php.stub';
 
         (new CreateStatusesTable())->up();
     }
-    
+
     /**
      * Load package service provider.
      *
@@ -38,7 +38,8 @@ class TestCase extends \Orchestra\Testbench\TestCase
     /**
      * Define environment setup.
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param \Illuminate\Foundation\Application $app
+     *
      * @return void
      */
     protected function defineEnvironment($app)
@@ -46,9 +47,9 @@ class TestCase extends \Orchestra\Testbench\TestCase
         // Setup default database to use sqlite :memory:
         $app['config']->set('database.default', 'testing');
         $app['config']->set('database.connections.testing', [
-            'driver' => 'sqlite',
+            'driver'   => 'sqlite',
             'database' => ':memory:',
-            'prefix' => '',
+            'prefix'   => '',
         ]);
 
         // Setup package own config (statuses)
@@ -62,6 +63,6 @@ class TestCase extends \Orchestra\Testbench\TestCase
      */
     protected function defineDatabaseMigrations()
     {
-        $this->loadMigrationsFrom(__DIR__ . '/database');
+        $this->loadMigrationsFrom(__DIR__.'/database');
     }
 }

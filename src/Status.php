@@ -36,9 +36,9 @@ class Status extends Model
      *
      * @param mixed  $modelClass
      * @param string $column
-     * 
+     *
      * @return \Illuminate\Database\Eloquent\Model|object|\Illuminate\Database\Eloquent\Builder|null|mixed
-     * 
+     *
      * @deprecated Removing this method on next major release of "skore-labs/laravel-status"
      */
     public static function getDefault($modelClass, $column = 'id')
@@ -60,9 +60,9 @@ class Status extends Model
     /**
      * Get column from status enum class.
      *
-     * @param \Spatie\Enum\Enum $enum
+     * @param \Spatie\Enum\Enum                   $enum
      * @param \Illuminate\Database\Eloquent\Model $from
-     * @param string|array            $column
+     * @param string|array                        $column
      *
      * @return \Illuminate\Database\Eloquent\Model|object|\Illuminate\Database\Eloquent\Builder|null|mixed
      */
@@ -87,10 +87,10 @@ class Status extends Model
 
     /**
      * Get default status from model.
-     * 
-     * @param \Illuminate\Database\Eloquent\Builder $query 
-     * @param string|\Illuminate\Database\Eloquent\Model $modelType 
-     * 
+     *
+     * @param \Illuminate\Database\Eloquent\Builder      $query
+     * @param string|\Illuminate\Database\Eloquent\Model $modelType
+     *
      * @return void
      */
     public function scopeDefaultFrom(Builder $query, $modelType)

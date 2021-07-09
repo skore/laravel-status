@@ -41,7 +41,7 @@ trait HasStatuses
             static::saving(function () {
                 if ($this->savingStatus) {
                     $this->savingStatus = false;
-                    $this->fireModelEvent('saved' . $this->formatStatusName($this->getStatus()), false);
+                    $this->fireModelEvent('saved'.$this->formatStatusName($this->getStatus()), false);
                 }
             });
         }
@@ -49,12 +49,12 @@ trait HasStatuses
 
     /**
      * Get the statuses enum used for some utilities.
-     * 
+     *
      * @return string|\Spatie\Enum\Enum
      */
     public static function statusesClass()
     {
-        return config('status.enums_path') . class_basename(self::class) . 'Status';
+        return config('status.enums_path').class_basename(self::class).'Status';
     }
 
     /**
@@ -190,11 +190,11 @@ trait HasStatuses
         $value = $this->formatStatusName($value);
 
         // if ($value && static::checkStatus($value)) {
-            $this->savingStatus = $this->fireModelEvent("saving${value}") !== false;
+        $this->savingStatus = $this->fireModelEvent("saving${value}") !== false;
 
-            $this->status()->associate(
-                $this->status()->getModel()::getFromEnum(static::statusesClass()::from($value), $this)
-            );
+        $this->status()->associate(
+            $this->status()->getModel()::getFromEnum(static::statusesClass()::from($value), $this)
+        );
         // }
     }
 

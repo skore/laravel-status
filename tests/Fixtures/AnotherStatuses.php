@@ -10,5 +10,5 @@ use Spatie\Enum\Enum;
  */
 class AnotherStatuses extends Enum
 {
-    // 
+    //
 }

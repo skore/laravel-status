@@ -28,7 +28,7 @@ class Post extends Model implements Statusable
 
     /**
      * Get the statuses enum used for some utilities.
-     * 
+     *
      * @return string|\SkoreLabs\LaravelStatus\Tests\Fixtures\PostStatuses
      */
     public static function statusesClass()

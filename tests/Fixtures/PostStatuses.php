@@ -11,5 +11,5 @@ use Spatie\Enum\Enum;
  */
 class PostStatuses extends Enum
 {
-    // 
+    //
 }
