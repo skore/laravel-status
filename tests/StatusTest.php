@@ -36,10 +36,10 @@ class StatusTest extends TestCase
     public function test_status_assignment()
     {
         /** @var \SkoreLabs\LaravelStatus\Tests\Fixtures\Post $post */
-        $post = Post::make(
+        $post = Post::make([
             'title'   => $this->faker->words(3, true),
             'content' => $this->faker->paragraph(),
-        );
+        ]);
 
         $post->setStatus('draft');
 
