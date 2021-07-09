@@ -246,14 +246,14 @@ trait HasStatuses
      * List all resources of a specified status.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param mixed                                 $value
+     * @param string|\Spatie\Enum\Enum              $value
      *
      * @return Illuminate\Database\Eloquent\Builder
      */
     public function scopeStatus(Builder $query, $name)
     {
         return $query->whereHas('status', function (Builder $query) use ($name) {
-            $query->where('name', 'like', $name);
+            $query->where('name', 'like', $name instanceof Enum ? $name->label : $name);
         });
     }
 

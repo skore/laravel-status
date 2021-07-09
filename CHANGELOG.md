@@ -7,11 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.1] - 2021-07-09
+
+## Changed
+
+- `Model::status()` query scope now accepts enum instances
+
 ## [2.1.0] - 2021-07-09
 
 ## Changed
 
-- Model::hasStatus() now accepts enum instances
+- `Model::hasStatus()` now accepts enum instances
 - Required package `spatie/enum` upgraded to v3
 - A lot of simplification all over the place
 - Deprecated static method `Status::getDefault()` use instead `Status::defaultFrom($model)` query scope
