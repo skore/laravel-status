@@ -79,10 +79,7 @@ class StatusTest extends TestCase
 
         $post->save();
 
-        print $post->status?->name ?: 'zzz';
         Event::assertDispatched(StatusCreating::class, function (StatusCreating $event) use ($post) {
-            print get_class($event->model);
-
             return $event->model->is($post)
                 && $event->model->getDefaultStatus() === optional($event->model->status)->name;
         });
