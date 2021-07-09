@@ -16,13 +16,13 @@
     <include>
       <directory suffix=".php">src/</directory>
     </include>
+    <report>
+      <xml outputFile="coverage.xml"/>
+    </report>
   </coverage>
   <testsuites>
-    <testsuite name="Skore Test Suite">
+    <testsuite name="Package Test Suite">
       <directory>tests</directory>
     </testsuite>
   </testsuites>
-  <php>
-    <ini name="memory_limit" value="2048M"/>
-  </php>
 </phpunit>
