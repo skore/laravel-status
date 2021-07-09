@@ -9,7 +9,7 @@ class CreateStatusesTable extends Migration
     public function up()
     {
         Schema::create('statuses', static function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->string('name');
             $table->string('model_type');
             $table->boolean('is_default')->default(false);
