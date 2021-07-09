@@ -9,7 +9,7 @@ class CreatePostsTestTable extends Migration
     public function up()
     {
         Schema::create('posts', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->unsignedBigInteger('status_id')->nullable();
             $table->string('title');
             $table->text('content');
