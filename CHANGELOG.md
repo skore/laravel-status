@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 2021-07-12
+
+## Changed
+
+- Fixes around conditional assignation `setStatus(['previous' => 'new'])`
+
+## Added
+
+- `Status::toEnum` utility method for transform string value to enum object
+- `Model::setStatusWhen` method which works similarly the same as `setStatus`
+- More tests around all the exposed and internal methods
+
 ## [2.1.1] - 2021-07-09
 
 ## Changed

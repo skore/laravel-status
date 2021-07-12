@@ -61,6 +61,7 @@ Customize enum for status check (using _spatie/enum_ package, [check their docum
 
 - [hasStatus](#hasStatus)
 - [setStatus](#setStatus)
+- [setStatusWhen](#setStatusWhen)
 - [status](#status)
 - [statuses](#statuses)
 - [getDefaultStatus](#getDefaultStatus)
@@ -90,7 +91,7 @@ Set status or mutate status **only if the previous status match the key.**
 $post->setStatus('was published');
 
 // Change if post has status Published to Was Published.
-$post->setStatus(['published' => 'was published'])
+$post->setStatus(['published' => 'was published']);
 ```
 
 You can also use the attribute to set a status:
@@ -105,6 +106,15 @@ if ($post->hasStatus('published')) {
 
 // When save it check and attach the status
 $post->save();
+```
+
+### setStatusWhen
+
+You can also do the same with `setStatusWhen` method like the example above with `setStatus`.
+
+```php
+// Change if post has status Published to Was Published.
+$post->setStatusWhen('published', 'was published');
 ```
 
 ### status
