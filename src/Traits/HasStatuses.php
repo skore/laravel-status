@@ -41,7 +41,7 @@ trait HasStatuses
             static::saving(function () {
                 if ($this->savingStatus) {
                     $this->savingStatus = false;
-                    $this->fireModelEvent('saved'.$this->formatStatusName($this->getStatus()), false);
+                    $this->fireModelEvent('saved' . $this->formatStatusName($this->getStatus()), false);
                 }
             });
         }
@@ -54,7 +54,7 @@ trait HasStatuses
      */
     public static function statusesClass()
     {
-        return config('status.enums_path').class_basename(self::class).'Status';
+        return config('status.enums_path') . class_basename(self::class) . 'Status';
     }
 
     /**
@@ -118,29 +118,6 @@ trait HasStatuses
     }
 
     /**
-     * Check if current model status is the provided and return.
-     *
-     * @param string|array $name
-     *
-     * @return mixed|false
-     */
-    protected function checkCurrentStatus($name)
-    {
-        $name = (array) $name;
-
-        $checkNamesArr = array_filter([
-            array_key_first($name) ?? null,
-            head($name) ?? null,
-        ]);
-
-        if (count($checkNamesArr) > 1 && $this->hasStatus($checkNamesArr) !== head($checkNamesArr)) {
-            return false;
-        }
-
-        return last($checkNamesArr);
-    }
-
-    /**
      * Check if name is a possible status.
      *
      * @param mixed|null $name
@@ -165,17 +142,39 @@ trait HasStatuses
      */
     public function setStatus($name = null)
     {
-        $name = $this->checkCurrentStatus(
-            $name instanceof Enum ? $name->value : $name
-        );
+        if (is_array($name) && !empty($name) && Arr::isAssoc($name)) {
+            return $this->setStatusWhen(array_key_first($name), head($name));
+        }
 
-        $this->setStatusAttribute($name);
+        if (empty($name) || is_null($name) || !$this->hasStatus($name)) {
+            return false;
+        }
 
-        if (is_null($name) || !$this->savingStatus) {
+        $this->status = $name;
+
+        if (!$this->savingStatus) {
             return false;
         }
 
         return $this->save();
+    }
+
+    /**
+     * Set status when current status is.
+     * 
+     * @param mixed $current 
+     * @param mixed $new 
+     * @return void 
+     */
+    public function setStatusWhen($current, $new)
+    {
+        if (!$this->hasStatus($current) || $this->hasStatus($new)) {
+            return false;
+        }
+
+        $this->status = $new;
+
+        $this->save();
     }
 
     /**

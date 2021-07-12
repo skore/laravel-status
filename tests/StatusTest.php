@@ -41,14 +41,15 @@ class StatusTest extends TestCase
             'content' => $this->faker->paragraph(),
         ]);
 
-        $post->setStatus('draft');
+        $post->status = 'published';
+        $post->save();
 
         $this->assertFalse($post->isDirty(), 'Model::status($value) should associate + save (persisting)');
 
-        $this->assertTrue($post->status->name === 'draft', 'Model status should be the one previously assigned: "draft"');
+        $this->assertTrue($post->status->name === 'published', 'Model status should be the one previously assigned: "draft"');
 
         $this->assertTrue(
-            $post->hasStatus('dRaFt') && $post->status(['dRafT']),
+            $post->hasStatus('pUbliShed') && $post->status(['pUbLished']),
             'Model::hasStatus($name) & Model::status([$name, ...]) methods should work'
         );
 
@@ -58,9 +59,27 @@ class StatusTest extends TestCase
         );
 
         $this->assertTrue(
-            $post->hasStatus(PostStatuses::draft()),
+            $post->hasStatus(PostStatuses::published()),
             'Model::hasStatus($enum) method should also work with enums'
         );
+    }
+
+    public function test_status_conditional_assignment()
+    {
+        /** @var \SkoreLabs\LaravelStatus\Tests\Fixtures\Post $post */
+        $post = Post::make()->forceFill([
+            'title'   => $this->faker->words(3, true),
+            'content' => $this->faker->paragraph(),
+        ]);
+
+        $post->status = 'published';
+        $post->save();
+        
+        $this->assertEquals($post->status->name, PostStatuses::published());
+        
+        $post->status(['published' => 'draft']);
+        
+        $this->assertEquals($post->status->name, PostStatuses::draft());
     }
 
     public function test_model_status_default_assignation()
