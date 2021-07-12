@@ -74,11 +74,11 @@ class StatusTest extends TestCase
 
         $post->status = 'published';
         $post->save();
-        
+
         $this->assertEquals($post->status->name, PostStatuses::published());
-        
+
         $post->status(['published' => 'draft']);
-        
+
         $this->assertEquals($post->status->name, PostStatuses::draft());
     }
 
