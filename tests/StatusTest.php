@@ -33,6 +33,35 @@ class StatusTest extends TestCase
         });
     }
 
+    public function test_status_to_enum()
+    {
+        $this->assertEquals(
+            Post::statusesClass()::published(),
+            Status::toEnum(Post::statusesClass(), 'published')
+        );
+
+        /** @var \SkoreLabs\LaravelStatus\Tests\Fixtures\Post $post */
+        $post = Post::make()->forceFill([
+            'title'   => $this->faker->words(3, true),
+            'content' => $this->faker->paragraph(),
+        ]);
+        
+        $mock = $this->mock(Post::class)->shouldAllowMockingProtectedMethods();
+        
+        $mock->shouldReceive('toStatusEnum')
+            ->andReturn(PostStatuses::published());
+            
+        $post->setStatus('published');
+        
+        $this->assertEquals(PostStatuses::published()->label, $post->getStatus());
+
+        $mock->shouldReceive('toStatusEnum')
+            ->withSomeOfArgs($post->getStatus(), 'draft', 'archived')
+            ->andReturnValues([PostStatuses::published(), PostStatuses::draft(), PostStatuses::archived()]);
+
+        $this->assertFalse($post->hasStatus(['draft', 'archived']));
+    }
+
     public function test_status_assignment()
     {
         /** @var \SkoreLabs\LaravelStatus\Tests\Fixtures\Post $post */
@@ -46,7 +75,11 @@ class StatusTest extends TestCase
 
         $this->assertFalse($post->isDirty(), 'Model::status($value) should associate + save (persisting)');
 
-        $this->assertTrue($post->status->name === 'published', 'Model status should be the one previously assigned: "draft"');
+        $this->assertEquals(
+            PostStatuses::published()->label,
+            $post->status->name,
+            'Model status should be the one previously assigned: "published"'
+        );
 
         $this->assertTrue(
             $post->hasStatus('pUbliShed') && $post->status(['pUbLished']),
@@ -54,8 +87,8 @@ class StatusTest extends TestCase
         );
 
         $this->assertFalse(
-            $post->hasStatus(['published', 'archived']),
-            'Model::hasStatus([$name, ...]) method shouldn\'t return true when array of statuses doesn\'t match the current "draft"'
+            $post->hasStatus(['draft', 'archiVed']),
+            'Model::hasStatus([$name, ...]) method shouldn\'t return true when array of statuses doesn\'t match the current "published"'
         );
 
         $this->assertTrue(
@@ -74,12 +107,12 @@ class StatusTest extends TestCase
 
         $post->status = 'published';
         $post->save();
-
-        $this->assertEquals($post->status->name, PostStatuses::published());
-
+        
+        $this->assertEquals(PostStatuses::published(), $post->status->name);
+        
         $post->status(['published' => 'draft']);
-
-        $this->assertEquals($post->status->name, PostStatuses::draft());
+        
+        $this->assertEquals(PostStatuses::draft(), $post->status->name);
     }
 
     public function test_model_status_default_assignation()

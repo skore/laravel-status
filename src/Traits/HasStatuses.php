@@ -145,12 +145,12 @@ trait HasStatuses
         if (is_array($name) && !empty($name) && Arr::isAssoc($name)) {
             return $this->setStatusWhen(array_key_first($name), head($name));
         }
-
-        if (empty($name) || is_null($name) || !$this->hasStatus($name)) {
+        
+        if (empty($name) || is_null($name) || $this->hasStatus($name)) {
             return false;
         }
 
-        $this->status = $name;
+        $this->setStatusAttribute($name);
 
         if (!$this->savingStatus) {
             return false;
@@ -173,7 +173,7 @@ trait HasStatuses
             return false;
         }
 
-        $this->status = $new;
+        $this->setStatusAttribute($new);
 
         $this->save();
     }
@@ -187,6 +187,10 @@ trait HasStatuses
      */
     public function setStatusAttribute($value = null)
     {
+        if (! $value) {
+            return;
+        }
+
         $value = $this->formatStatusName($value);
 
         $this->savingStatus = $this->fireModelEvent("saving${value}") !== false;
@@ -205,12 +209,29 @@ trait HasStatuses
      */
     public function hasStatus($value)
     {
-        $enumFromStatusInstance = static::statusesClass()::from($this->getStatus());
+        $enumFromStatusInstance = $this->toStatusEnum(
+            $this->getStatus() ?: $this->getDefaultStatus()
+        );
 
-        return Collection::make((array) $value)->mapInto(static::statusesClass())
-            ->every(function ($item) use ($enumFromStatusInstance) {
-                return $enumFromStatusInstance->equals($item);
-            });
+        return Collection::make((array) $value)->map(function ($item) {
+            return $this->toStatusEnum($item);
+        })->filter()->every(function ($item) use ($enumFromStatusInstance) {
+            return $enumFromStatusInstance->equals($item);
+        });
+    }
+
+    /**
+     * Transform status string value to enum object.
+     * 
+     * @param mixed $value 
+     * @return \Spatie\Enum\Enum|false
+     */
+    protected function toStatusEnum($value)
+    {
+        /** @var \SkoreLabs\LaravelStatus\Status $statusModel */
+        $statusModel = $this->status()->getModel();
+
+        return $statusModel::toEnum(static::statusesClass(), $value);
     }
 
     /**

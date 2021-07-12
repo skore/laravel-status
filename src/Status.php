@@ -102,4 +102,24 @@ class Status extends Model
                 : $modelType
         )->where('is_default', true);
     }
+
+    /**
+     * Wrap status value into status enum class.
+     * 
+     * @param mixed|\Spatie\Enum\Enum $class 
+     * @param mixed $value 
+     * @return \Spatie\Enum\Enum|false
+     */
+    public static function toEnum($class, $value)
+    {
+        if (!$value || !method_exists($class, 'tryFrom')) {
+            return false;
+        }
+
+        if (!($value instanceof Enum)) {
+            return $class::tryFrom($value);
+        }
+
+        return $value;
+    }
 }
