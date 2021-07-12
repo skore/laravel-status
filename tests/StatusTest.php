@@ -45,14 +45,14 @@ class StatusTest extends TestCase
             'title'   => $this->faker->words(3, true),
             'content' => $this->faker->paragraph(),
         ]);
-        
+
         $mock = $this->mock(Post::class)->shouldAllowMockingProtectedMethods();
-        
+
         $mock->shouldReceive('toStatusEnum')
             ->andReturn(PostStatuses::published());
-            
+
         $post->setStatus('published');
-        
+
         $this->assertEquals(PostStatuses::published()->label, $post->getStatus());
 
         $mock->shouldReceive('toStatusEnum')
@@ -107,11 +107,11 @@ class StatusTest extends TestCase
 
         $post->status = 'published';
         $post->save();
-        
+
         $this->assertEquals(PostStatuses::published(), $post->status->name);
-        
+
         $post->status(['published' => 'draft']);
-        
+
         $this->assertEquals(PostStatuses::draft(), $post->status->name);
     }
 

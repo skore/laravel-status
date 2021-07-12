@@ -145,7 +145,7 @@ trait HasStatuses
         if (is_array($name) && !empty($name) && Arr::isAssoc($name)) {
             return $this->setStatusWhen(array_key_first($name), head($name));
         }
-        
+
         if (empty($name) || is_null($name) || $this->hasStatus($name)) {
             return false;
         }
@@ -187,7 +187,7 @@ trait HasStatuses
      */
     public function setStatusAttribute($value = null)
     {
-        if (! $value) {
+        if (!$value) {
             return;
         }
 
@@ -222,8 +222,9 @@ trait HasStatuses
 
     /**
      * Transform status string value to enum object.
-     * 
-     * @param mixed $value 
+     *
+     * @param mixed $value
+     *
      * @return \Spatie\Enum\Enum|false
      */
     protected function toStatusEnum($value)

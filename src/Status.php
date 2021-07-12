@@ -105,9 +105,10 @@ class Status extends Model
 
     /**
      * Wrap status value into status enum class.
-     * 
-     * @param mixed|\Spatie\Enum\Enum $class 
-     * @param mixed $value 
+     *
+     * @param mixed|\Spatie\Enum\Enum $class
+     * @param mixed                   $value
+     *
      * @return \Spatie\Enum\Enum|false
      */
     public static function toEnum($class, $value)
