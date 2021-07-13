@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.0] - 2021-07-13
+
+## Added
+
+- More test coverage
+
+## Changed
+
+- More methods now accepting enum classes as inputs: `setStatus` & `setStatusWhen`
+
+## Removed
+
+- Internal method `checkStatus`
+
 ## [2.2.0] - 2021-07-12
 
 ## Changed
