@@ -201,7 +201,7 @@ class StatusTest extends TestCase
         ]);
 
         $post->setStatus(PostStatuses::archived());
-        
+
         $this->assertFalse($post->isDirty());
 
         $this->assertEquals(
