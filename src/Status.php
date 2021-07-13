@@ -72,7 +72,7 @@ class Status extends Model
 
         $query = self::query()
             ->where('model_type', $fromModelMorphClass)
-            ->where('name', 'like', "%{$enum->value}%");
+            ->where('name', 'like', "%{$enum->label}%");
 
         if ($query->count('id') === 0) {
             $query->orWhere(function (Builder $query) use ($fromModelMorphClass) {

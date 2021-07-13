@@ -41,7 +41,7 @@ trait HasStatuses
             static::saving(function () {
                 if ($this->savingStatus) {
                     $this->savingStatus = false;
-                    $this->fireModelEvent('saved'.$this->formatStatusName($this->getStatus()), false);
+                    $this->fireModelEvent('saved' . $this->formatStatusName($this->getStatus()), false);
                 }
             });
         }
@@ -54,7 +54,7 @@ trait HasStatuses
      */
     public static function statusesClass()
     {
-        return config('status.enums_path').class_basename(self::class).'Status';
+        return config('status.enums_path') . class_basename(self::class) . 'Status';
     }
 
     /**
@@ -118,22 +118,6 @@ trait HasStatuses
     }
 
     /**
-     * Check if name is a possible status.
-     *
-     * @param mixed|null $name
-     *
-     * @return bool
-     */
-    protected static function checkStatus($name = null)
-    {
-        return in_array($name, with(new static())->formatStatusName(
-            array_flip(
-                static::statusesClass()::toArray()
-            )
-        ));
-    }
-
-    /**
      * Set status by label(s) to key and perform a save.
      *
      * @param array|string|\Spatie\Enum\Enum $name
@@ -181,7 +165,7 @@ trait HasStatuses
     /**
      * Set status relation as attribute.
      *
-     * @param mixed $value
+     * @param string|\Spatie\Enum\Enum $value
      *
      * @return void
      */
@@ -191,12 +175,12 @@ trait HasStatuses
             return;
         }
 
-        $value = $this->formatStatusName($value);
+        $eventName = $this->formatStatusName($value instanceof Enum ? $value->value : $value);
 
-        $this->savingStatus = $this->fireModelEvent("saving${value}") !== false;
+        $this->savingStatus = $this->fireModelEvent("saving${eventName}") !== false;
 
         $this->status()->associate(
-            $this->status()->getModel()::getFromEnum(static::statusesClass()::from($value), $this)
+            $this->status()->getModel()::getFromEnum($this->toStatusEnum($value), $this)
         );
     }
 

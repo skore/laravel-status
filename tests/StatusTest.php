@@ -33,35 +33,6 @@ class StatusTest extends TestCase
         });
     }
 
-    public function test_status_to_enum()
-    {
-        $this->assertEquals(
-            Post::statusesClass()::published(),
-            Status::toEnum(Post::statusesClass(), 'published')
-        );
-
-        /** @var \SkoreLabs\LaravelStatus\Tests\Fixtures\Post $post */
-        $post = Post::make()->forceFill([
-            'title'   => $this->faker->words(3, true),
-            'content' => $this->faker->paragraph(),
-        ]);
-
-        $mock = $this->mock(Post::class)->shouldAllowMockingProtectedMethods();
-
-        $mock->shouldReceive('toStatusEnum')
-            ->andReturn(PostStatuses::published());
-
-        $post->setStatus('published');
-
-        $this->assertEquals(PostStatuses::published()->label, $post->getStatus());
-
-        $mock->shouldReceive('toStatusEnum')
-            ->withSomeOfArgs($post->getStatus(), 'draft', 'archived')
-            ->andReturnValues([PostStatuses::published(), PostStatuses::draft(), PostStatuses::archived()]);
-
-        $this->assertFalse($post->hasStatus(['draft', 'archived']));
-    }
-
     public function test_status_assignment()
     {
         /** @var \SkoreLabs\LaravelStatus\Tests\Fixtures\Post $post */
@@ -107,6 +78,10 @@ class StatusTest extends TestCase
 
         $post->status = 'published';
         $post->save();
+
+        $this->assertEquals(PostStatuses::published(), $post->status->name);
+
+        $post->status(['archived' => 'draft']);
 
         $this->assertEquals(PostStatuses::published(), $post->status->name);
 
@@ -185,6 +160,67 @@ class StatusTest extends TestCase
                 Status::getFromEnum(PostStatuses::published(), $post, ['*'])
             ),
             'Status::getFromEnum($enum, $model, [\'*\']) must return a whole "Status" model result'
+        );
+    }
+
+    public function test_status_to_enum()
+    {
+        $this->assertEquals(
+            Post::statusesClass()::published(),
+            Status::toEnum(Post::statusesClass(), 'published')
+        );
+
+        /** @var \SkoreLabs\LaravelStatus\Tests\Fixtures\Post $post */
+        $post = Post::make()->forceFill([
+            'title'   => $this->faker->words(3, true),
+            'content' => $this->faker->paragraph(),
+        ]);
+
+        $mock = $this->mock(Post::class)->shouldAllowMockingProtectedMethods();
+
+        $mock->shouldReceive('toStatusEnum')
+        ->andReturn(PostStatuses::published());
+
+        $post->setStatus('published');
+
+        $this->assertEquals(PostStatuses::published()->label, $post->getStatus());
+
+        $mock->shouldReceive('toStatusEnum')
+        ->withSomeOfArgs($post->getStatus(), 'draft', 'archived')
+        ->andReturnValues([PostStatuses::published(), PostStatuses::draft(), PostStatuses::archived()]);
+
+        $this->assertFalse($post->hasStatus(['draft', 'archived']));
+    }
+
+    public function test_status_assignments_with_enums()
+    {
+        /** @var \SkoreLabs\LaravelStatus\Tests\Fixtures\Post $post */
+        $post = Post::make()->forceFill([
+            'title'   => $this->faker->words(3, true),
+            'content' => $this->faker->paragraph(),
+        ]);
+
+        $post->setStatus(PostStatuses::archived());
+        
+        $this->assertFalse($post->isDirty());
+
+        $this->assertEquals(
+            PostStatuses::archived()->label,
+            $post->status->name
+        );
+
+        $post->setStatusWhen(PostStatuses::draft(), PostStatuses::published());
+
+        $this->assertEquals(
+            PostStatuses::archived()->label,
+            $post->status->name
+        );
+
+        $post->setStatusWhen(PostStatuses::archived(), PostStatuses::published());
+
+        $this->assertEquals(
+            PostStatuses::published()->label,
+            $post->status->name
         );
     }
 }
