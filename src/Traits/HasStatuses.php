@@ -4,6 +4,7 @@ namespace SkoreLabs\LaravelStatus\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use SkoreLabs\LaravelStatus\Events\StatusCreating;
 use SkoreLabs\LaravelStatus\Status;
@@ -216,7 +217,8 @@ trait HasStatuses
         /** @var \SkoreLabs\LaravelStatus\Status $statusModel */
         $statusModel = $this->status()->getModel();
 
-        return $statusModel::toEnum(static::statusesClass(), $value);
+        return $statusModel::toEnum(static::statusesClass(),
+            is_string($value) ? Str::camel($value) : $value);
     }
 
     /**
