@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.2] - 2021-08-06
+
+## Fixed
+
+- Fix bool return when `setStatus` and `status` methods
+
 ## [2.3.1] - 2021-07-28
 
 ## Fixed
