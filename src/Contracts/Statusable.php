@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Builder;
 interface Statusable
 {
     /**
-     * Get, set or check status relationship.
+     * Get or set current status for this model.
      *
      * @param bool $value
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo|bool
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo|string|bool
      */
     public function status($value = false);
 
@@ -30,38 +30,48 @@ interface Statusable
     public static function getStatuses();
 
     /**
-     * Set status by name or using a previous status.
+     * Set status by label(s) to key and perform a save.
      *
-     * @param array|string $name
+     * @param array|string|\Spatie\Enum\Enum $name
      *
      * @return bool
      */
     public function setStatus($name);
 
     /**
+     * Set status when current status is.
+     *
+     * @param mixed $current
+     * @param mixed $new
+     *
+     * @return bool
+     */
+    public function setStatusWhen($current, $new);
+
+    /**
      * Set status relation as attribute.
      *
-     * @param mixed $value
+     * @param string|\Spatie\Enum\Enum $value
      *
      * @return void
      */
     public function setStatusAttribute($value = null);
 
     /**
-     * Get if current model has status(es).
+     * Check current status is equals to.
      *
-     * @param string|array $value
+     * @param string|array|\Spatie\Enum\Enum $value
      *
      * @return bool
      */
     public function hasStatus($value);
 
     /**
-     * Get current model status or default instead.
+     * Get model status or default instead.
      *
      * @param string $column
      *
-     * @return mixed
+     * @return string|null
      */
     public function getStatus($column = 'name');
 
@@ -78,7 +88,7 @@ interface Statusable
      * List all resources of a specified status.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param mixed                                 $value
+     * @param string|\Spatie\Enum\Enum              $value
      *
      * @return Illuminate\Database\Eloquent\Builder
      */

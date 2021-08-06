@@ -79,7 +79,7 @@ trait HasStatuses
     }
 
     /**
-     * Get current status for this model.
+     * Get or set current status for this model.
      *
      * @param bool $value
      *
@@ -150,7 +150,7 @@ trait HasStatuses
      * @param mixed $current
      * @param mixed $new
      *
-     * @return void
+     * @return bool
      */
     public function setStatusWhen($current, $new)
     {
@@ -160,7 +160,7 @@ trait HasStatuses
 
         $this->setStatusAttribute($new);
 
-        $this->save();
+        return $this->save();
     }
 
     /**
@@ -186,7 +186,7 @@ trait HasStatuses
     }
 
     /**
-     * Get status relation as appended attribute.
+     * Check current status is equals to.
      *
      * @param string|array|\Spatie\Enum\Enum $value
      *

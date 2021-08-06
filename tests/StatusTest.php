@@ -81,11 +81,11 @@ class StatusTest extends TestCase
 
         $this->assertEquals(PostStatuses::published(), $post->status->name);
 
-        $post->status(['archived' => 'draft']);
+        $this->assertFalse($post->status(['archived' => 'draft']));
 
         $this->assertEquals(PostStatuses::published(), $post->status->name);
 
-        $post->status(['published' => 'draft']);
+        $this->assertTrue($post->status(['published' => 'draft']));
 
         $this->assertEquals(PostStatuses::draft(), $post->status->name);
     }
