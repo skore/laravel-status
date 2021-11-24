@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.3] - 2021-11-24
+
+## Fixed
+
+- AttachDefaultStatus event population when creating
+
 ## [2.3.2] - 2021-08-06
 
 ## Fixed
