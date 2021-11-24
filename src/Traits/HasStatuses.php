@@ -22,6 +22,8 @@ trait HasStatuses
         if (config('status.enable_events', true)) {
             static::creating(function ($model) {
                 event(new StatusCreating($model));
+
+                return true;
             });
         }
     }
