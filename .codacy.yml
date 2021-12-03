@@ -2,5 +2,6 @@
 engines:
   phpcs:
     php_version: 7.4-
+
 exclude_paths:
   - "**/tests/**"

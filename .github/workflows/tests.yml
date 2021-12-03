@@ -10,7 +10,7 @@ jobs:
       fail-fast: true
       matrix:
         os: [ ubuntu-latest ]
-        php: [7.4, 8.0]
+        php: [7.4, 8.0, 8.1]
         laravel: [ 6.*, 8.* ]
         dependency-version: [ prefer-stable ]
         include:
@@ -48,7 +48,7 @@ jobs:
           CODACY_USERNAME: "d8vjork"
           CODACY_PROJECT_NAME: "laravel-status"
         run: |
-          cp phpunit.dist.xml phpunit.xml || true
+          cp phpunit.coverage.dist.xml phpunit.xml || true
           vendor/bin/phpunit
           bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
             -a $CODACY_API_TOKEN \
