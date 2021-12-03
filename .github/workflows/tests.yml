@@ -54,7 +54,6 @@ jobs:
             -a $CODACY_API_TOKEN \
             -u $CODACY_USERNAME \
             -p $CODACY_PROJECT_NAME \
-            --organization-provider gh \
             -l php \
             -r clover.xml
             --commit-uuid $GITHUB_SHA
