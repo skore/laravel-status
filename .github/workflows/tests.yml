@@ -10,7 +10,7 @@ jobs:
       fail-fast: true
       matrix:
         os: [ ubuntu-latest ]
-        php: [7.4, 8.0, 8.1]
+        php: [7.4, 8.0]
         laravel: [ 6.*, 8.* ]
         dependency-version: [ prefer-stable ]
         include:
@@ -57,3 +57,4 @@ jobs:
             --organization-provider gh \
             -l php \
             -r clover.xml
+            --commit-uuid $GITHUB_SHA
