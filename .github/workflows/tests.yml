@@ -43,17 +43,13 @@ jobs:
           composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
 
       - name: Execute tests
-        env:
-          CODACY_API_TOKEN: ${{ secrets.CODACY_API_TOKEN }}
-          CODACY_USERNAME: "d8vjork"
-          CODACY_PROJECT_NAME: "laravel-status"
         run: |
           cp phpunit.coverage.dist.xml phpunit.xml || true
           vendor/bin/phpunit
-          bash <(curl -Ls https://coverage.codacy.com/get.sh) report \
-            -a $CODACY_API_TOKEN \
-            -u $CODACY_USERNAME \
-            -p $CODACY_PROJECT_NAME \
-            -l php \
-            -r clover.xml
-            --commit-uuid $GITHUB_SHA
+
+      - name: Deploy coverage to codacy
+        uses: codacy/codacy-coverage-reporter-action@v1
+        with:
+          # project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          api-token: ${{ secrets.CODACY_API_TOKEN }}
+          coverage-reports: cobertura.xml
