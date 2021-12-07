@@ -16,6 +16,10 @@
     <include>
       <directory suffix=".php">./src</directory>
     </include>
+    <exclude>
+      <file>src/EventServiceProvider.php</file>
+      <file>src/Contracts/Statusable.php</file>
+    </exclude>
     <report>
       <clover outputFile="clover.xml"/>
     </report>
