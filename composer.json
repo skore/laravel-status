@@ -25,9 +25,8 @@
         "ext-json": "*",
         "laravel/nova": "^2.0|^3.0",
         "orchestra/testbench": "^4.0|^5.0|^6.0|^7.0",
-        "phpunit/phpunit": "^7.0|^9.0",
-        "psalm/plugin-laravel": "^1.4",
-        "vimeo/psalm": "^4.8"
+        "phpstan/phpstan": "^1.4",
+        "phpunit/phpunit": "^7.0|^9.0"
     },
     "suggest": {
         "laravel/nova": "Required if using status nova filter"
