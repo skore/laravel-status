@@ -16,12 +16,15 @@ jobs:
         include:
           - laravel: 6.*
             testbench: 4.*
-
+          
           - laravel: 8.*
             testbench: 6.*
 
           - laravel: 9.*
             testbench: 7.*
+        exclude:
+            - laravel: 9.*
+              php: 7.4
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
 
