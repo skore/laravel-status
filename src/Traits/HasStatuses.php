@@ -259,7 +259,7 @@ trait HasStatuses
      * List all resources of a specified status.
      *
      * @param \Illuminate\Database\Eloquent\Builder<TModelClass> $query
-     * @param string|\Spatie\Enum\Enum              $name
+     * @param string|\Spatie\Enum\Enum                           $name
      *
      * @return \Illuminate\Database\Eloquent\Builder<TModelClass>
      */

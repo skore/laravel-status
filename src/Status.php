@@ -34,8 +34,8 @@ class Status extends Model
     /**
      * Get default status from model.
      *
-     * @param class-string<\Illuminate\Database\Eloquent\Model>  $modelClass
-     * @param string|array<string> $column
+     * @param class-string<\Illuminate\Database\Eloquent\Model> $modelClass
+     * @param string|array<string>                              $column
      *
      * @return mixed
      *
@@ -111,7 +111,8 @@ class Status extends Model
     /**
      * Create a new Eloquent query builder for the model.
      *
-     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param \Illuminate\Database\Query\Builder $query
+     *
      * @return \SkoreLabs\LaravelStatus\StatusBuilder
      */
     public function newEloquentBuilder($query)

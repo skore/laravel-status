@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 /**
  * @mixin \Illuminate\Database\Eloquent\Model
  * @template TModelClass of \Illuminate\Database\Eloquent\Model
- * 
+ *
  * @property-read \SkoreLabs\LaravelStatus\Status|string|bool $status
  * @property-read int $status_id
  */
@@ -95,7 +95,7 @@ interface Statusable
      * List all resources of a specified status.
      *
      * @param \Illuminate\Database\Eloquent\Builder<TModelClass> $query
-     * @param string|\Spatie\Enum\Enum              $name
+     * @param string|\Spatie\Enum\Enum                           $name
      *
      * @return \Illuminate\Database\Eloquent\Builder<TModelClass>
      */

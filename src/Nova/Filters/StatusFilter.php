@@ -38,9 +38,9 @@ class StatusFilter extends BooleanFilter
     /**
      * Apply the filter to the given query.
      *
-     * @param \Illuminate\Http\Request              $request
+     * @param \Illuminate\Http\Request                                                   $request
      * @param \Illuminate\Database\Eloquent\Builder<\Illuminate\Database\Eloquent\Model> $query
-     * @param mixed                                 $value
+     * @param mixed                                                                      $value
      *
      * @return \Illuminate\Database\Eloquent\Builder<\Illuminate\Database\Eloquent\Model>
      */

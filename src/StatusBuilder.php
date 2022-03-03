@@ -26,7 +26,7 @@ class StatusBuilder extends Builder
                     ? $modelType->getMorphClass()
                     : $modelType
             );
-            
+
             $query->where('is_default', true);
         });
 
