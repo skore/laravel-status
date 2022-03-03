@@ -1,0 +1,14 @@
+includes:
+    - ./vendor/nunomaduro/larastan/extension.neon
+
+parameters:
+
+    paths:
+        - src
+
+    level: 6
+
+    # ignoreErrors:
+    #     - '#PHPDoc tag @var#'
+
+    checkMissingIterableValueType: false

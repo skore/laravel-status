@@ -18,7 +18,7 @@ class Status extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var array<string>
      */
     protected $fillable = [
         'name', 'model_type', 'is_default',
@@ -34,16 +34,18 @@ class Status extends Model
     /**
      * Get default status from model.
      *
-     * @param mixed  $modelClass
-     * @param string $column
+     * @param class-string<\Illuminate\Database\Eloquent\Model>  $modelClass
+     * @param string|array<string> $column
      *
-     * @return \Illuminate\Database\Eloquent\Model|object|\Illuminate\Database\Eloquent\Builder|null|mixed
+     * @return mixed
      *
      * @deprecated Removing this method on next major release of "skore-labs/laravel-status"
      */
     public static function getDefault($modelClass, $column = 'id')
     {
+        /** @var \Illuminate\Database\Eloquent\Builder<\SkoreLabs\LaravelStatus\Status> $baseQuery */
         $baseQuery = self::where('model_type', $modelClass);
+
         $query = $baseQuery->where('is_default', true);
 
         if (!$query->exists()) {
@@ -86,24 +88,6 @@ class Status extends Model
     }
 
     /**
-     * Get default status from model.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder      $query
-     * @param string|\Illuminate\Database\Eloquent\Model $modelType
-     *
-     * @return void
-     */
-    public function scopeDefaultFrom(Builder $query, $modelType)
-    {
-        $query->where(
-            'model_type',
-            $modelType instanceof Model
-                ? $modelType->getMorphClass()
-                : $modelType
-        )->where('is_default', true);
-    }
-
-    /**
      * Wrap status value into status enum class.
      *
      * @param mixed|\Spatie\Enum\Enum $class
@@ -122,5 +106,16 @@ class Status extends Model
         }
 
         return $value;
+    }
+
+    /**
+     * Create a new Eloquent query builder for the model.
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @return \SkoreLabs\LaravelStatus\StatusBuilder
+     */
+    public function newEloquentBuilder($query)
+    {
+        return new StatusBuilder($query);
     }
 }

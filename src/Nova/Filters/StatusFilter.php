@@ -12,12 +12,12 @@ class StatusFilter extends BooleanFilter
     /**
      * The type of resource that should be filtered on.
      *
-     * @var \Illuminate\Database\Eloquent\Builder
+     * @var \Illuminate\Database\Eloquent\Builder<\SkoreLabs\LaravelStatus\Status>
      */
     protected $statusesQuery;
 
     /**
-     * @var bool|mixed
+     * @var array|bool
      */
     protected $defaultOption = false;
 
@@ -39,10 +39,10 @@ class StatusFilter extends BooleanFilter
      * Apply the filter to the given query.
      *
      * @param \Illuminate\Http\Request              $request
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Illuminate\Database\Eloquent\Builder<\Illuminate\Database\Eloquent\Model> $query
      * @param mixed                                 $value
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder<\Illuminate\Database\Eloquent\Model>
      */
     public function apply(Request $request, $query, $value)
     {
@@ -79,7 +79,7 @@ class StatusFilter extends BooleanFilter
     /**
      * Set the default options for the filter.
      *
-     * @return array
+     * @return array|bool
      */
     public function default()
     {

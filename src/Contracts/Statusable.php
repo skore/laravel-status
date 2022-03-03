@@ -4,6 +4,13 @@ namespace SkoreLabs\LaravelStatus\Contracts;
 
 use Illuminate\Database\Eloquent\Builder;
 
+/**
+ * @mixin \Illuminate\Database\Eloquent\Model
+ * @template TModelClass of \Illuminate\Database\Eloquent\Model
+ * 
+ * @property-read \SkoreLabs\LaravelStatus\Status|string|bool $status
+ * @property-read int $status_id
+ */
 interface Statusable
 {
     /**
@@ -11,7 +18,7 @@ interface Statusable
      *
      * @param bool $value
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo|string|bool
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\SkoreLabs\LaravelStatus\Status, TModelClass>|string|bool
      */
     public function status($value = false);
 
@@ -87,10 +94,10 @@ interface Statusable
     /**
      * List all resources of a specified status.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string|\Spatie\Enum\Enum              $value
+     * @param \Illuminate\Database\Eloquent\Builder<TModelClass> $query
+     * @param string|\Spatie\Enum\Enum              $name
      *
-     * @return Illuminate\Database\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder<TModelClass>
      */
     public function scopeStatus(Builder $query, $name);
 }

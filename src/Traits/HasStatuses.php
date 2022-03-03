@@ -10,6 +10,9 @@ use SkoreLabs\LaravelStatus\Events\StatusCreating;
 use SkoreLabs\LaravelStatus\Status;
 use Spatie\Enum\Enum;
 
+/**
+ * @template TModelClass of \Illuminate\Database\Eloquent\Model
+ */
 trait HasStatuses
 {
     /**
@@ -255,10 +258,10 @@ trait HasStatuses
     /**
      * List all resources of a specified status.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string|\Spatie\Enum\Enum              $value
+     * @param \Illuminate\Database\Eloquent\Builder<TModelClass> $query
+     * @param string|\Spatie\Enum\Enum              $name
      *
-     * @return Illuminate\Database\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder<TModelClass>
      */
     public function scopeStatus(Builder $query, $name)
     {

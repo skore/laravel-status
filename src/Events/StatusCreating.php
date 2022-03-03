@@ -12,14 +12,14 @@ class StatusCreating
     use SerializesModels;
 
     /**
-     * @var \SkoreLabs\LaravelStatus\Contracts\Statusable
+     * @var \SkoreLabs\LaravelStatus\Contracts\Statusable<\Illuminate\Database\Eloquent\Model>
      */
     public $model;
 
     /**
      * Create a new event instance.
      *
-     * @param \SkoreLabs\LaravelStatus\Contracts\Statusable $statusable
+     * @param \SkoreLabs\LaravelStatus\Contracts\Statusable<\Illuminate\Database\Eloquent\Model> $statusable
      *
      * @return void
      */
