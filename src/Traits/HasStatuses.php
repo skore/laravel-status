@@ -271,6 +271,25 @@ trait HasStatuses
     }
 
     /**
+     * List all resources of an array of statuses.
+     * 
+     * @param \Illuminate\Database\Eloquent\Builder $query 
+     * @param array<string>|array<\Spatie\Enum\Enum> $statuses
+     * @return void 
+     */
+    public function scopeStatuses(Builder $query, array $statuses)
+    {
+        return $query->whereHas('status', function (Builder $query) use ($statuses) {
+            $i = 0;
+
+            foreach ($statuses as $status) {
+                $query->where('name', 'like', $status instanceof Enum ? $status->label : $status, $i === 0 ? 'and' : 'or');
+                $i++;
+            }
+        });
+    }
+
+    /**
      * Get status name capitalised.
      *
      * @param string|array|null $name
