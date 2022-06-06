@@ -272,10 +272,11 @@ trait HasStatuses
 
     /**
      * List all resources of an array of statuses.
-     * 
-     * @param \Illuminate\Database\Eloquent\Builder $query 
+     *
+     * @param \Illuminate\Database\Eloquent\Builder  $query
      * @param array<string>|array<\Spatie\Enum\Enum> $statuses
-     * @return void 
+     *
+     * @return void
      */
     public function scopeStatuses(Builder $query, array $statuses)
     {
