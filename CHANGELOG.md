@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fix Laravel Nova status filter
 
-## [2.5.0] - 2022-05-06
+## [2.5.0] - 2022-06-06
 
 ### Added
 
