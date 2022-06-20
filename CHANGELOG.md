@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.5.1] - 2022-06-20
+
+### Fixed
+
+- Fix Laravel Nova status filter
+
 ## [2.5.0] - 2022-05-06
 
 ### Added
