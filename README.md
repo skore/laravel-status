@@ -1,5 +1,7 @@
 # Laravel status
 
+> ⚠️ **This package is gonna be deprecated in favour of this one: https://github.com/open-southeners/laravel-model-status**
+
 Laravel code-typed statuses for Eloquent models.
 
 ## Status
